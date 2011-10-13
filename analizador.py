@@ -1,46 +1,57 @@
+#! /usr/bin/env python 
+# -*- coding: utf-8 -*- 
+from keys import *
+from string_tokenizer import *
 
-"""
-BNF
-
-ExpReg    -> Factor OperUna SubExpReg | Factor SubExpReg
-SubExpReg -> OperBin Factor SubExpReg | Factor SubExpReg | VACIO
-Factor    -> DefReg | Alfabeto | (ExpReg)
-OperBin   -> '|' | . 
-OperUna   -> + | * | ? 
-VACIO     -> ''
-"""
-OPERADORES_BINARIOS = "|"
-OPERADORES_UNARIO = "+*?"
-OPERADORES = OPERADORES_BINARIOS + OPERADORES_UNARIO + "()"
-ALFABETO = "abcd"
-DEFINICION_REGULAR = "$"
-DEBUG = True
+DEBUG = False
 
 class Analizador:
-    token = None
-    index = 0;
-    tokens =[]
-    def __init__ (self, all_tokens):
-        self.tokens = all_tokens
-        self.token =  self.tokens[0]
+    """
+    BNF Para una expresion regular
+    ===============================================================
+    ExpReg    -> Factor OperUna SubExpReg | Factor SubExpReg
+    SubExpReg -> OperBin Factor SubExpReg | Factor SubExpReg | VACIO
+    Factor    -> DefReg | Alfabeto | (ExpReg)
+    OperBin   -> '|' | . 
+    OperUna   -> + | * | ? 
+    VACIO     -> ''
+    """
+    
+    def __init__ (self, tokens, keys):
+        self.tokens = tokens
+        self.token = self.tokens.get_next_token()
         self.index = 0
-        
+        self.operadores_binarios = keys.operadores_binarios
+        self.operadores_unarios = keys.operadores_unarios
+        self.alfabeto = keys.alfabeto 
+        self.definicion_regular = keys.definicion_regular
+    
+    def start(self): 
+        self.exp_reg()
+        return True
+    
     def exp_reg(self):
+        """
+        ExpReg -> Factor OperUna SubExpReg | Factor SubExpReg
+        """
         if DEBUG : 
             print "exp_reg-> Token = ", self.token
         self.factor();
-        while len(self.tokens) > self.index :
+        while self.tokens.len() > self.index :
             self.match(self.token);
-            if OPERADORES_UNARIO.find(self.token) >= 0 :
+            if self.operadores_unarios.find(self.token) >= 0 :
                 self.oper_una();
                 self.match(self.token);
             self.sub_exp_reg();
         
     def sub_exp_reg(self):
+        """
+        SubExpReg -> OperBin Factor SubExpReg | Factor SubExpReg | VACIO
+        """
         if DEBUG : 
             print "sub_exp_reg-> Token = ", self.token
-        while len(self.tokens) > self.index :
-            if OPERADORES_BINARIOS.find(self.token) < 0 :
+        while self.tokens.len() > self.index :
+            if self.operadores_binarios.find(self.token) < 0 :
                 return;
             
             self.oper_bin();
@@ -51,16 +62,19 @@ class Analizador:
             
     
     def factor(self) :
+        """
+        Factor    -> DefReg | Alfabeto | (ExpReg)
+        """
         if DEBUG : 
             print "factor -> Token = ", self.token
-        while len(self.tokens) > self.index :
-            if self.token.find(DEFINICION_REGULAR) > 0 :
+        while self.tokens.len() > self.index :
+            if self.token.find(self.definicion_regular) > 0 :
                 #self.def_reg();
                 if DEBUG : 
                     print "def_reg -> Token = ", self.token
                 self.match(self.token)
                 return;
-            elif ALFABETO.find(self.token) >= 0 : 
+            elif self.alfabeto.find(self.token) >= 0 : 
                 if DEBUG : 
                     print "alfabeto -> Token = ", self.token
                 return;
@@ -70,62 +84,55 @@ class Analizador:
                 self.match(")")
     
     def oper_bin(self):
+        """
+        OperBin   -> '|' | . 
+        """
         if DEBUG : 
             print "oper_bin-> Token = ", self.token
-        if OPERADORES_BINARIOS.find(self.token) < 0 :
-            print "ERROR"
-            return;
+        if self.operadores_binarios.find(self.token) < 0 :
+            print "ERROR DE SINTAXIS, se esperaba un operador binario"
+            exit();
             
         
     
     def oper_una(self):
+        """
+        OperUna   -> + | * | ? 
+        """
         if DEBUG : 
             print "oper_una-> Token = ", self.token
-        if OPERADORES_UNARIO.find(self.token) < 0 :
-            print "ERROR"
-            return;
+        if self.operadores_unarios.find(self.token) < 0 :
+            print "ERROR DE SINTAXIS, se esperaba un operador unario"
+            exit();
         
     def match (self, t) : 
+        """
+        Se encarga de consumir el token y solicitar el siguente token
+        si es que no existe un error de sintaxis.
+        """
         if self.token == t :
             self.index +=1
-            if  self.index < len(self.tokens) :
-                self.token = self.tokens [self.index]
+            if  self.index < self.tokens.len() :
+                self.token = self.tokens.get_next_token()
+                
             if DEBUG : 
                 print "MATCH (" , t, ") -> NEXT( ", self.token,")" 
             return;
             
-        else : print "ERROR DE SINTAXIS, inesperado '", t, "' se esperaba '", self.token, "'" ; exit()
+        else : 
+            print "ERROR DE SINTAXIS, inesperado '", t,"' se esperaba '"\
+                , self.token, "'" ; exit()
             
-        
+
+
 if __name__ == "__main__" :
-    er = "a*(b|c)?d+a$HOLA;bcd*"
-    token = ""
-    tokens = []
-    index = 0
-    while (index < len(er)) :
-        c = er[index]
-        if ALFABETO.find(c)>=0 :
-            token += c
-            tokens.append(token)
-            token = ""
-            
-        elif OPERADORES.find(c)>=0 :
-            tokens.append(c)
-            token = ""
-            
-        elif DEFINICION_REGULAR.find(c) >=0 :
-            end = er.find(";", index, len(er))
-            tokens.append(er [(index):end])
-            index = end 
-            token = ""
-        else :
-            print "ERROR: El caracter '" + c + "' no se encuentra definido"
-            exit();
-
-        index +=1
-
+    
+    er = "a*(b|c?)*d+a$HOLA;*bcd*" 
+    
+    keys =  keys()
+    print "Start.."
+    tokens = StringTokenizer (er, keys)
     print er
-    print tokens
-
-    a = Analizador(tokens);
-    a.exp_reg();
+    a = Analizador(tokens, keys);
+    if a.start() :
+        print "Done.."
