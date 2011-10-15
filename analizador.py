@@ -9,10 +9,11 @@ class Analizador:
     """
     BNF Para una expresion regular
     ===============================================================
-    ExpReg    -> Factor OperUna SubExpReg | Factor SubExpReg
-    SubExpReg -> OperBin Factor SubExpReg | Factor SubExpReg | VACIO
-    Factor    -> DefReg | Alfabeto | (ExpReg)
-    OperBin   -> '|' | . 
+    ExpReg    -> Term SubExpReg 
+    SubExpReg -> '|'Term SubExpReg | VACIO
+    Term      -> Factor OperUna SubTerm | Factor SubTerm
+    SubTerm   -> '.' Factor SubTerm | VACIO 
+    Factor    -> DefReg | Alfabeto | (ExpReg) 
     OperUna   -> + | * | ? 
     VACIO     -> ''
     """
@@ -32,33 +33,56 @@ class Analizador:
     
     def exp_reg(self):
         """
-        ExpReg -> Factor OperUna SubExpReg | Factor SubExpReg
+         ExpReg -> Term SubExpReg 
         """
         if DEBUG : 
-            print "exp_reg-> Token = ", self.token
+            print "exp_reg -> Token = ", self.token
+        self.term();
+        self.match(self.token);
+        self.sub_exp_reg();
+    
+    def sub_exp_reg(self):
+        """
+        SubExpReg -> '|'Term SubExpReg | VACIO
+        """
+        if DEBUG : 
+            print "sub_exp_reg -> Token = ", self.token
+        if self.token.find("|") <0 :
+            return;
+        
+        self.term()
+        self.match(self.token);
+        self.sub_exp_reg();
+
+    def term (self):
+        """
+        Term -> Factor OperUna SubTerm | Factor SubTerm
+        """
+        if DEBUG : 
+            print "term -> Token = ", self.token
         self.factor();
         while self.tokens.len() > self.index :
             self.match(self.token);
             if self.operadores_unarios.find(self.token) >= 0 :
                 self.oper_una();
                 self.match(self.token);
-            self.sub_exp_reg();
+            self.sub_term();
         
-    def sub_exp_reg(self):
+    def sub_term (self):
         """
-        SubExpReg -> OperBin Factor SubExpReg | Factor SubExpReg | VACIO
+        SubTerm   -> '.' Factor SubTerm | VACIO 
         """
         if DEBUG : 
-            print "sub_exp_reg-> Token = ", self.token
+            print "term-> Token = ", self.token
         while self.tokens.len() > self.index :
-            if self.operadores_binarios.find(self.token) < 0 :
+            if self.token.find(".") < 0 :
                 return;
             
             self.oper_bin();
             self.match(self.token);
             self.factor();
             self.match(self.token);
-            self.sub_exp_reg();
+            self.sub_term();
             
     
     def factor(self) :
@@ -127,7 +151,7 @@ class Analizador:
 
 if __name__ == "__main__" :
     
-    er = "a*(b|c?)*d+a$HOLA;*bcd*" 
+    er = "a*(b|c?)*d+a$HOLA;*bcd*"
     
     keys =  keys()
     print "Start.."
