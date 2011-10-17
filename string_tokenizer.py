@@ -1,3 +1,4 @@
+from inf2post import *
 
 class StringTokenizer :
     """
@@ -18,10 +19,10 @@ class StringTokenizer :
         self.operadores = keys.operadores
         self.alfabeto = keys.alfabeto 
         self.definicion_regular = keys.definicion_regular
-        self.__tokenizar__();
+        self.__tokenizar__(keys);
         
         
-    def __tokenizar__(self) :
+    def __tokenizar__(self, keys) :
         """
         """
         token = ""
@@ -59,6 +60,10 @@ class StringTokenizer :
                 exit();
 
             index +=1
+        print self.tokens
+        
+        
+        infija = inf2post(self.tokens, keys)
     
     def len(self):
         """
