@@ -103,6 +103,30 @@ class Thompson :
         self.automatas.append(automata)
         
     def _or(self) :
+        automata =  Automata()
+        
+        afnd_final = self.automatas.pop()
+        afnd_inicial = self.automatas.pop()
+        
+        estado_inicial = Estado()
+        estado_final = Estado()
+        
+        automata.add_estado_inicial(estado_inicial)
+        automata.add_estado_final(estado_final)
+        
+        automata.add_transicion(estado_inicial, afnd_inicial.estado_inicial, Keys.VACIO)
+        automata.add_transicion(estado_inicial, afnd_final.estado_inicial, Keys.VACIO)
+        
+        automata.add_arcos(afnd_inicial.arcos)
+        automata.add_arcos(afnd_final.arcos)
+        
+        automata.add_transicion(afnd_inicial.estado_final,estado_final, Keys.VACIO)
+        automata.add_transicion(afnd_final.estado_final, estado_final, Keys.VACIO)
+        
+        
+        self.automatas.append(automata)
+        
+        
         pass
     def concat(self) :
         automata =  Automata()
