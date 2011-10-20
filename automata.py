@@ -38,22 +38,66 @@ class Automata :
         self.estados = {}
         self.arcos = []
         
-    def add_arcos(self, arcos):
+    def add_arcos(self, arcos) :
+        """
+        Este método se encarga de añadir los arcos a la lista de arcos
+        del automata.
+        
+        @type arcos  : Arco []
+        @param arcos : los arcos que serán añadidos a lista de arcos del
+                        automata.
+        """
         self.arcos += arcos
         
     def __add_estado(self, estado) :
+        """
+        Este método se encarga de añadir un estado a la lista de estados
+        del automata.
+        
+        @type estado  : Estado
+        @param estado : el estado que será añadido a la lista.
+        """
         self.estados[estado.id] = estado
         
-    def add_estado_inicial(self, estado): 
+    def add_estado_inicial(self, estado):
+        """
+        Este método se encarga de establecer el estado inicial del 
+        automata y añadir a la lista de estados
+        
+        @type estado  : Estado
+        @param estado : el estado inicial del automata.
+        """
         self.estado_inicial = estado
         self.__add_estado(estado)
         
     def add_estado_final(self, estado): 
+        """
+        Este método se encarga de establecer el estado final del 
+        automata y añadir a la lista de estados
+        
+        @type estado  : Estado
+        @param estado : el estado final del automata.
+        """
         self.estado_final = estado
         self.__add_estado(estado)
         
     def add_transicion(self, ori_estado, sig_estado, simbolo):
+        """
+        Este método se encarga de añadir un arco entre los estados
+        ori_estado y sig_estado, mediante el caracter de transición 
+        simbolo. Posteriormente los estados son añadidos a la lista de 
+        estados del automata.
         
+        @type ori_estado  : Estado
+        @param ori_estado : el estado inicial.
+        
+        @type sig_estado  : Estado
+        @param sig_estado : el estado final.
+        
+        @type simbolo  : String
+        @param simbolo : el simbolo que indica la transicion del estado
+                        ori_estado al sig_estado.
+        """
         self.estados[ori_estado.id] = ori_estado
         self.estados[sig_estado.id] = sig_estado
         
