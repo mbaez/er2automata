@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-from keys import *
+
 from string_tokenizer import *
+from automata import *
 """
 :author: Maximiniliano Báez González
 :contact: mxbg.py@gmail.com
@@ -172,19 +173,23 @@ class Analizador:
 
 if __name__ == "__main__":
 
-    er = "a*.(b|c)*.$hola;.a"
+    er = "a.b.c.d.a"
 
-    keys = keys()
+    keys = Keys()
     print er
     print "Start.."
     tokens = StringTokenizer (er, keys)
     a = Analizador(tokens, keys);
     if a.start():
-        print "Done.."
+        print "Done.." + str(a.postfija)
 
-    postfija = ""
-    for c in a.postfija:
+    t = Thompson(a.postfija)
+    t.start()
+    print t
     
-        postfija += c
-    print postfija
-    print a.postfija
+
+    #for c in a.postfija:
+    
+    #postfija += c
+    #print postfija
+    #print a.postfija
