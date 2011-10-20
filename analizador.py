@@ -173,7 +173,7 @@ class Analizador:
 
 if __name__ == "__main__":
 
-    er = "a.b.c.d.a"
+    er = "a.(a|b).d"
 
     keys = Keys()
     print er
