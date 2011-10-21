@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from gui import *
 from string_tokenizer import *
 from automata import *
 """
@@ -41,7 +41,7 @@ class Analizador:
     def start(self):
         """
         Este método inica el analizador sintactico.
-        
+
         @rtype  : Boolean
         @return : True si es que el proceso a finalizado correctamente
 
@@ -55,7 +55,7 @@ class Analizador:
         """
         if DEBUG:
             print "exp_reg -> Token = ", self.token
-            
+
         self.term();
         self.sub_exp_reg();
 
@@ -65,7 +65,7 @@ class Analizador:
         """
         if DEBUG:
             print "sub_exp_reg -> Token = ", self.token
-            
+
         if self.token != "|":
             return;
 
@@ -112,14 +112,14 @@ class Analizador:
         if self.token.find(self.definicion_regular) >= 0:
             if DEBUG:
                 print "def_reg -> Token = ", self.token
-                
+
             self.postfija.append(self.token)
             self.match(self.token)
 
         elif self.alfabeto.find(self.token) >= 0:
             if DEBUG:
                 print "alfabeto -> Token = ", self.token
-                
+
             self.postfija.append(self.token)
             self.match(self.token)
 
@@ -142,7 +142,7 @@ class Analizador:
         if self.operadores_unarios.find(self.token) < 0:
             print "ERROR DE SINTAXIS, se esperaba un operador unario"
             exit();
-        
+
         self.postfija.append(self.token)
         self.match(self.token)
 
@@ -150,7 +150,7 @@ class Analizador:
         """
         Se encarga de consumir el token y solicitar el siguente token
         si es que no existe un error de sintaxis.
-        
+
         @type  t : String
         @param t : token que se desea consumir.
         """
@@ -161,19 +161,19 @@ class Analizador:
 
             if DEBUG:
                 print "MATCH ('" + t + "') -> NEXT('" + self.token + "')\n"
-                
+
             return;
 
         else:
             print "ERROR DE SINTAXIS, inesperado '", t, "' se esperaba '"\
-                , self.token, "'"; 
+                , self.token, "'";
             exit()
 
 
 
 if __name__ == "__main__":
 
-    er = "a.(a|b).d"
+    er = "a+"
 
     keys = Keys()
     print er
@@ -185,11 +185,6 @@ if __name__ == "__main__":
 
     t = Thompson(a.postfija)
     t.start()
-    print t
-    
 
-    #for c in a.postfija:
-    
-    #postfija += c
-    #print postfija
-    #print a.postfija
+    draw(t.automatas)
+

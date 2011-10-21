@@ -204,8 +204,8 @@ class Automata :
         @return : una cadena con la informacion de los estados formateados
         """
         cad = ""
-        for estado in self.arcos :
-            cad += str(estado) + "\n"
+        for arco in self.arcos :
+            cad += str(arco) + "\n"
         cad = cad[0:-1]
         cad += "" 
         return cad
