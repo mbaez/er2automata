@@ -1,15 +1,18 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 
 class Keys :
     """
     Conjunto de variables claves del analizador
     """
 
-    VACIO = ""
+    VACIO = "Ɛ"
     OR = "|"
     PLUS = "+"
     STAR = "*"
     CONCAT = "."
     NONE_OR_ONE = "?"
+    COPY_LABEL ="B" 
 
     def __init__ (self) :
         self.operadores_binarios = "|."
