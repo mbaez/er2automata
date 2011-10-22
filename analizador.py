@@ -1,8 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-from gui import *
-from string_tokenizer import *
-from automata import *
+
 """
 :author: Maximiniliano Báez González
 :contact: mxbg.py@gmail.com
@@ -168,23 +166,4 @@ class Analizador:
             print "ERROR DE SINTAXIS, inesperado '", t, "' se esperaba '"\
                 , self.token, "'";
             exit()
-
-
-
-if __name__ == "__main__":
-
-    er = "a+"
-
-    keys = Keys()
-    print er
-    print "Start.."
-    tokens = StringTokenizer (er, keys)
-    a = Analizador(tokens, keys);
-    if a.start():
-        print "Done.." + str(a.postfija)
-
-    t = Thompson(a.postfija)
-    t.start()
-
-    draw(t.automatas)
 
