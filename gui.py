@@ -10,14 +10,14 @@ from thompson import *
 from subconjuntos import *
 from afd import *
 
-def draw(automatas) :
+def draw(automata, file_name="automata") :
     #se crea un grafo dirigido 
     gr = pgv.AGraph(directed=True,rankdir="LR")
     estados = {}
-    inicio = automatas[0].estado_inicial
+    inicio = automata.estado_inicial
     print "INICIO : " + str(inicio)
     #Se obienen todos los estados a partir de los arcos del automata
-    for arco in automatas[0].arcos : 
+    for arco in automata.arcos : 
         #se usa un dict para evitar estados repetidos
         estados[arco.origen.id] = arco.origen
         estados[arco.destino.id] = arco.destino
@@ -43,7 +43,7 @@ def draw(automatas) :
     gr.add_edge(("",inicio.id), label="Inicio", color='#8dad48')
     #por cada arco definido se añade las relaciones entre los nodos
     #definidos anteriormente
-    for arco in automatas[0].arcos :
+    for arco in automata.arcos :
         #se añaden los arcos entre los estados y el simbolo de 
         #de transicion, con esto se consigue un lo siguiente :
         #(inicio) ---simbolo --->(destino)
@@ -53,7 +53,7 @@ def draw(automatas) :
     #se utiliza el agoritmo dot para el grafo
     gr.layout(prog='dot')
     #se escribe el grafo resultado en un archivo
-    gr.draw('automata.svg')
+    gr.draw(file_name + '.svg')
 
 
 
@@ -75,12 +75,11 @@ if __name__ == "__main__":
     a = Automata()
     a = t.start()
 
-    draw(t.automatas)
+    draw(t.automatas[0])
     
     s = Subconjuntos(a)
     af = Afd()
     af = s.getAfd()
-    
 
-    #draw(s.automatas)
+    draw(af, "afd")
 

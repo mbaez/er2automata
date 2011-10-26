@@ -219,7 +219,10 @@ class Subconjuntos:
                     self.colaTemp.append(U) 
                 else:
                     break
-                
+                #Se añade el estado inicial del automata 
+                if self.afd.estado_inicial == None :
+                    self.afd.estado_inicial = estadoOrigen
+                    
                 #Agregamos la transicion al AFD
                 self.afd.add_transicion(estadoOrigen, estadoDestino, simbolo)
         
