@@ -61,6 +61,7 @@ def draw(automatas) :
 if __name__ == "__main__":
 
     er = "(a|b)*.a.b.b"
+    #er = "a?.b*.(a|c)?.d+"
 
     keys = Keys()
     print er

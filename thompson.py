@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*- 
 from automata import *
 from keys import *
-from afn import *
         
 class Thompson :
     
@@ -15,20 +14,20 @@ class Thompson :
         a = Automata()
         for token in self.tokens_infija :
             if token == Keys.STAR :
-                a= self.star()
+                a = self.star()
             elif token == Keys.PLUS :
-                a= self.plus()
+                a = self.plus()
             elif token == Keys.NONE_OR_ONE :
-                a= self.none_or_one()
+                a = self.none_or_one()
             elif token == Keys.OR :
-                a= self._or()
+                a = self._or()
             elif token == Keys.CONCAT :
-                a= self.concat()
+                a = self.concat()
             else : 
-                a= self.single(token)
+                a = self.single(token)
         
         self.automatas[0].estado_final.final = True
-        
+
         return a
         
     def single(self, simbolo):
@@ -49,7 +48,6 @@ class Thompson :
         automata.add_transicion(estado_inicial, estado_final, simbolo)
         #se añade  el automata a la pila
         self.automatas.append(automata)
-        
         return automata
         
     def _or(self) :
@@ -81,7 +79,6 @@ class Thompson :
         
         
         self.automatas.append(automata)
-        
         return automata
         
     def concat(self) :
@@ -100,15 +97,12 @@ class Thompson :
         afnd_inicial.estado_final.merge(afnd_final.estado_inicial)
         #se añade el alutomata a la pila
         self.automatas.append(automata)
-        
         return automata
         
     def none_or_one (self) :
         
         self.single(Keys.VACIO)
         self._or()
-        
-        return automata
         
     def plus (self) :
         automata = self.automatas.pop()
@@ -118,7 +112,6 @@ class Thompson :
 
         self.star()
         self.concat()
-        
         return automata
         
     def star (self) :
@@ -139,9 +132,7 @@ class Thompson :
                                 estado_final,Keys.VACIO)
                                 
         self.automatas.append(automata)
-        
         return automata
-        
         
     def __str__(self) :
         cad = ""
@@ -151,4 +142,3 @@ class Thompson :
         cad = cad[0:-1]
         cad += "" 
         return cad
-
