@@ -13,6 +13,8 @@ class Keys :
     CONCAT = "."
     NONE_OR_ONE = "?"
     COPY_LABEL ="B" 
+    ALFABETO = "ab"
+    
 
     def __init__ (self) :
         self.operadores_binarios = "|."

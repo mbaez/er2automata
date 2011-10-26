@@ -14,6 +14,7 @@ class Estado :
         self.id = "E" + str(Estado.ID)
         Estado.ID += 1
         self.final = final
+   
     
     def merge (self, estado) : 
         """
@@ -39,6 +40,12 @@ class Estado :
         estado.final = self.final
         
         return estado
+    
+    def get_final(self):
+        return self.final
+    
+    def set_final(self, final):
+        self.final = final
     
     def __str__(self):
         return self.id
@@ -116,7 +123,10 @@ class Automata :
         """
         self.estado_inicial = estado
         self.__add_estado(estado)
-        
+    
+    def getEstadoInicial(self):
+        return self.estado_inicial
+    
     def add_estado_final(self, estado): 
         """
         Este método se encarga de establecer el estado final del 
@@ -127,7 +137,11 @@ class Automata :
         """
         self.estado_final = estado
         self.__add_estado(estado)
-        
+    
+    def getEstadoFinal(self):
+        return self.estado_final
+    
+    
     def add_transicion(self, ori_estado, sig_estado, simbolo):
         """
         Este método se encarga de añadir un arco entre los estados
@@ -149,7 +163,7 @@ class Automata :
         self.estados[sig_estado.id] = sig_estado
         
         self.arcos.append(Arco(ori_estado, sig_estado, simbolo))
-        
+    
     def copy(self) :
         """
         Este método genera una copia de la instancia actual.
@@ -199,6 +213,22 @@ class Automata :
         #retorna el automata copia
         return automata
 
+    def get_transicion(self, ori_estado) :
+        """
+        Este método se encarga de obtener un arco a partir del estado
+        ori_estado.
+        
+        @type ori_estado  : Estado
+        @param ori_estado : el estado inicial.
+        
+        """
+        arc = []
+        for arco in self.arcos:
+            if (ori_estado.id == arco.origen.id):
+                arc.append(arco)
+        return arc
+
+        
     def __str__(self) :
         """
         Este método formatea la salida de la clase Automata

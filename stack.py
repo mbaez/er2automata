@@ -11,13 +11,9 @@ class Stack :
         self.items = [] 
 
     def push(self, item) : 
-        self.items.append(item)
-        if DEBUG :
-            self.imprimir(self.items) 
+        self.items.append(item) 
 
     def pop(self) : 
-        if DEBUG :
-            self.imprimir(self.items)
         return self.items.pop() 
         
 
@@ -26,9 +22,6 @@ class Stack :
             return True
         else :
             return False
-    
-    def imprimir(self, items):
-        print "Pila ->", items
     
     def getFin(self):
         return self.items[-1]

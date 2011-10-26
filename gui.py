@@ -7,12 +7,15 @@ import pygraphviz as pgv
 from string_tokenizer import *
 from analizador import *
 from thompson import *
+from subconjuntos import *
+from afd import *
 
 def draw(automatas) :
     #se crea un grafo dirigido 
     gr = pgv.AGraph(directed=True,rankdir="LR")
     estados = {}
     inicio = automatas[0].estado_inicial
+    print "INICIO : " + str(inicio)
     #Se obienen todos los estados a partir de los arcos del automata
     for arco in automatas[0].arcos : 
         #se usa un dict para evitar estados repetidos
@@ -57,7 +60,7 @@ def draw(automatas) :
 
 if __name__ == "__main__":
 
-    er = "a?.b*.(a|c)?.d+"
+    er = "(a|b)*.a.b.b"
 
     keys = Keys()
     print er
@@ -68,7 +71,15 @@ if __name__ == "__main__":
         print "Done.." + str(a.postfija)
 
     t = Thompson(a.postfija)
-    t.start()
+    a = Automata()
+    a = t.start()
 
     draw(t.automatas)
+    
+    s = Subconjuntos(a)
+    af = Afd()
+    af = s.getAfd()
+    
+
+    #draw(s.automatas)
 
