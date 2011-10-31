@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 #! /usr/bin/env python
 
-from inf2post import *
-
 """
 :author: Maximiniliano Báez González
 :contact: mxbg.py@gmail.com
@@ -102,8 +100,7 @@ class StringTokenizer:
             #caracter
             index += 1
         
-        
-        #infija = inf2post(self.tokens, keys)
+
     
     def len(self):
         """
