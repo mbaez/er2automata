@@ -4,7 +4,6 @@ from automata import *
 from keys import *
 from collections import deque
 from stack import *
-from afd import *
 
 """
 :author: Maria Jose Lopez
