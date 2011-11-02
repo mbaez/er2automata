@@ -12,7 +12,7 @@ from subconjuntos import *
 
 def draw(automata, file_name="automata") :
     #se crea un grafo dirigido
-    gr = pgv.AGraph(directed=True,rankdir="LR")
+    gr = pgv.AGraph(directed=True,rankdir="LR", strict=False)
     estados = {}
     inicio = automata.estado_inicial
     #se otienen todos los estados del dict
@@ -41,19 +41,23 @@ def draw(automata, file_name="automata") :
         #de transicion, con esto se consigue un lo siguiente :
         #(inicio) ---simbolo --->(destino)
         gr.add_edge((arco.origen.id,arco.destino.id),\
-                    label= arco.simbolo ,color='#8dad48')
+                    label=arco.simbolo ,color='#8dad48')
+
+        #gr.draw(str(arco.origen.id) + "-"+arco.simbolo + "--"+str(arco.destino.id) + '.svg')
+        #str(arco.origen) + "="+arco.simbolo + "=>"+str(arco.destino)
 
     #se utiliza el agoritmo dot para el grafo
+    #neato|dot|twopi|circo|fdp|nop
     gr.layout(prog='dot')
     #se escribe el grafo resultado en un archivo
     gr.draw(file_name + '.svg')
 
-
+from afd_minimo import AFD
 
 
 if __name__ == "__main__":
 
-    er = "(a|b)+"
+    er = "(a|b)*.a.b.b"
 
     keys = Keys()
     print er
@@ -74,6 +78,8 @@ if __name__ == "__main__":
     s = Subconjuntos(t.automatas[0])
     af = s.start_subconjutos()
     
-
     draw(af, "afd")
+    afd = AFD(af)
+    afd_min = afd.minimizar()
+    draw(afd_min, "minimo")
 

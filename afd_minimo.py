@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from automata import *
 """
 :author: Maximiniliano Báez González
 :contact: mxbg.py@gmail.com
@@ -80,6 +80,10 @@ class ConjuntoPi :
         #diccionario que posee como clave el id del estado y como valor
         #la referencia al grupo al cual pertenece.
         self.estados = {}
+        #variables utilizadas a la hora de determinar el punto de parada
+        #del algoritmo
+        self.len_grupos = 0
+        self.count_same_len = 0
 
     def add_estado (self, estado):
 
@@ -125,7 +129,7 @@ class ConjuntoPi :
         @param id_grupo : Id del grupo
 
         @type estado  : Estado[]
-        @param estado : estados que seran añadido al grupo id_grupo
+        @param estado : estados que serán añadido al grupo id_grupo
 
         """
         id_grupo = str(id_grupo)
@@ -149,6 +153,7 @@ class ConjuntoPi :
         @rtype  : Estado[]
         @return : estados que pertenecen al grupo
         """
+        print id
         return self.grupos[id]
 
     def get_group_by_estado(self, estado):
@@ -162,15 +167,23 @@ class ConjuntoPi :
         @return : el id del grupo al cual pertenece
         """
         return self.estados[estado.id]
-
+    
     def get_next_group(self):
         """
         @rtype  : String
         @return : el id del siguiente grupo
         """
-        for grupo in self.grupos :
-            if len(grupo) > 1 :
-                return grupo
+        len_grupos = len(self.grupos.keys())
+        for id_grupo in self.grupos.keys()  :
+
+            if len(self.grupos[id_grupo]) > 1 and self.count_same_len < len_grupos:
+                if len_grupos == self.len_grupos :
+                    self.count_same_len+=1
+                else:
+                    self.len_grupos = len_grupos
+                    self.count_same_len = 0
+                
+                return id_grupo
 
         return None
 
@@ -180,6 +193,7 @@ class ConjuntoPi :
         @return : la cantidad de grupos existentes.
         """
         return len(self.grupos)
+    
     def remove_group (self, key) :
 
         self.grupos.pop(key)
@@ -223,15 +237,56 @@ class AFD :
         while group_id != None :
             #se obtienen los estados del grupo
             estados = self.conjunto_pi.get_group_by_id(group_id)
+            
             self.__procesar_grupo(estados, group_id)
             #se obtiene el id del siguiente grupo a evaluar
             group_id = self.conjunto_pi.get_next_group()
+        
+        #print self.conjunto_pi.grupos
+        return self.__transformar_conjunto_pi()
 
+    def __transformar_conjunto_pi(self) : 
+        
+        afd_minimo = Automata()
+        transiciones = {}
+        
+        for arco in self.automata.arcos :
+            grupo_origen = self.conjunto_pi.get_group_by_estado(arco.origen)
+            grupo_destino = self.conjunto_pi.get_group_by_estado(arco.destino)
+            grupo_id = grupo_origen + arco.simbolo
+            
+            if not transiciones.has_key(grupo_id) :
+                print transiciones
+                transiciones[grupo_id] = grupo_destino
+                                
+                
+                origen = afd_minimo.get_estado_id(grupo_origen)
+                if origen == None :
+                    origen = Estado(id=grupo_origen)
+                if arco.origen.final : 
+                    origen.final = True
+                
+                destino = afd_minimo.get_estado_id(grupo_destino)
+                if destino == None :
+                    destino = Estado(id=grupo_destino)
+                if arco.destino.final : 
+                    destino.final = True
+
+                afd_minimo.add_transicion(origen, destino, arco.simbolo)
+                
+                if self.automata.get_estado_inicial().id == arco.origen.id :
+                    afd_minimo.estado_inicial = origen
+        
+        print transiciones
+        return afd_minimo
+            
+            
     def __procesar_grupo (self, estados, group_id) :
         """
         """
         sub_grupos = {}
         for estado in estados :
+            #print "\t->"+str(estado)
             self.__dividir_grupo(estado, sub_grupos)
 
         #si existen mas de 1 subgrupo se elimina el grupo y se añaden los
@@ -246,15 +301,16 @@ class AFD :
         """
         """
         id_sub_grupo = "";
-        for simbolo in self.simbolos :
-            grupo = self.conjunto_pi.get_table_value(estado.id + simbolo)
-
+        for simbolo in self.tabla.simbolos :
+            grupo = self.tabla.get_table_value(estado.id + simbolo)
+            #print "\t#" + str(grupo)
             id_sub_grupo += ":" + self.conjunto_pi.get_group_by_estado(grupo)
+        #print "\t$" + id_sub_grupo
 
         if not sub_grupos.has_key(id_sub_grupo) :
             #si no se encuentra en el sub grupo se inicializa una lista para
             #añadir los estados
             sub_grupos[id_sub_grupo] = []
 
-        sub_grupos.append(estado)
+        sub_grupos[id_sub_grupo].append(estado)
 

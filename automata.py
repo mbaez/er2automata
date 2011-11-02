@@ -13,9 +13,9 @@ from keys import *
 class Estado :
     ID = 1
 
-    def __init__ (self, final=False, id=None) :
+    def __init__ (self, final=False, id=None, prefijo="E") :
         if id == None:
-            self.id = "E" + str(Estado.ID)
+            self.id = prefijo + str(Estado.ID)
             Estado.ID += 1
         else :
             self.id = id
