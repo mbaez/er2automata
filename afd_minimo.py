@@ -157,7 +157,6 @@ class ConjuntoPi :
         @rtype  : Estado[]
         @return : estados que pertenecen al grupo
         """
-        print id
         return self.grupos[id]
 
     def get_group_by_estado(self, estado):
@@ -232,7 +231,6 @@ class AFD :
         self.conjunto_pi.add_estados(self.tabla.\
                             get_estados_no_finales())
 
-        print self.conjunto_pi
 
     def minimizar(self):
         """
@@ -260,7 +258,7 @@ class AFD :
             grupo_id = grupo_origen + arco.simbolo
             
             if not transiciones.has_key(grupo_id) :
-                print transiciones
+                
                 transiciones[grupo_id] = grupo_destino
                                 
                 
@@ -281,7 +279,7 @@ class AFD :
                 if self.automata.get_estado_inicial().id == arco.origen.id :
                     afd_minimo.estado_inicial = origen
         
-        print transiciones
+        
         return afd_minimo
             
             
