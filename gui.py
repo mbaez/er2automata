@@ -4,11 +4,10 @@
 #Librerias externas
 import pygraphviz as pgv
 #librerias internas del proyecto
-from string_tokenizer import *
 from analizador import *
 from thompson import *
 from subconjuntos import *
-#from automata import *
+from afd_minimo import AFD
 
 def draw(automata, file_name="automata") :
     #se crea un grafo dirigido
@@ -52,18 +51,18 @@ def draw(automata, file_name="automata") :
     #se escribe el grafo resultado en un archivo
     gr.draw(file_name + '.svg')
 
-from afd_minimo import AFD
 
 
 if __name__ == "__main__":
 
-    er = "(a|b)*.a.b.b"
+    er = "$a_or_b;*.a.b.b"
 
     keys = Keys()
+    keys.set_tabla_simbolos_value_at("a_or_b","(a|b)")
     print er
     print "Start.."
-    tokens = StringTokenizer (er, keys)
-    a = Analizador(tokens, keys);
+    #tokens = StringTokenizer (er, keys)
+    a = Analizador(er, keys);
     if a.start():
         print "Done.." + str(a.postfija)
 

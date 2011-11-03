@@ -67,7 +67,11 @@ class TablaTransiciones :
         @rtype  : Estado
         @return : el esado correspondiente en la tabla para el id
         """
-        return self.table[str(id_grupo)]
+        
+        if self.table.has_key(str(id_grupo)) :
+            return self.table[str(id_grupo)]
+        
+        return None
 
 class ConjuntoPi :
 

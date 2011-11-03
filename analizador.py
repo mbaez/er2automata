@@ -1,11 +1,10 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from string_tokenizer import *
 """
 :author: Maximiniliano Báez González
 :contact: mxbg.py@gmail.com
 """
-
 #Variable global que define si se mostran los detalles del proceso
 DEBUG = False
 
@@ -26,10 +25,11 @@ class Analizador:
     VACIO     -> ''
     """
 
-    def __init__ (self, tokens, keys):
-        self.tokens = tokens
+    def __init__ (self, expr_reg, keys):
+        self.tokens = StringTokenizer (expr_reg, keys)
         self.token = self.tokens.get_next_token()
         self.index = 0
+        self.keys = keys
         self.operadores_binarios = keys.operadores_binarios
         self.operadores_unarios = keys.operadores_unarios
         self.alfabeto = keys.alfabeto
@@ -110,8 +110,21 @@ class Analizador:
         if self.token.find(self.definicion_regular) >= 0:
             if DEBUG:
                 print "def_reg -> Token = ", self.token
-
-            self.postfija.append(self.token)
+            #se elimina el simblo de $ del token
+            self.token = self.token[1:]
+            #se busca si existe una entrada para la definición regular
+            #en la tabla de simbolos
+            def_reg_value = self.keys.get_tabla_simbolos_value_at(self.token)
+            
+            if def_reg_value == None :
+                print "ERROR DE SINTAXIS, La definición regular '" + \
+                        self.token + "' no se encuentra en la tabal de \
+                        simbolos."
+                exit()
+            
+            #se añade la notacion postfija de la definción regular
+            self.postfija += def_reg_value
+            
             self.match(self.token)
 
         elif self.alfabeto.find(self.token) >= 0:
