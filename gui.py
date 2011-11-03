@@ -8,6 +8,7 @@ from analizador import *
 from thompson import *
 from subconjuntos import *
 from afd_minimo import AFD
+from bnf import *
 
 def draw(automata, file_name="automata") :
     #se crea un grafo dirigido
@@ -82,3 +83,5 @@ if __name__ == "__main__":
     afd_min = afd.minimizar()
     draw(afd_min, "minimo")
 
+    b = Bnf(afd_min)
+    b.start_bnf()
