@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import pygraphviz as pgv
 from xml.dom.minidom import parse
 
 class SVGManager : 
@@ -16,10 +17,10 @@ class SVGManager :
         @param svg_file_name : nombre del archivo svg
         """
         self.svg_file_name = svg_file_name
-        self.document = parse(svg_file_name)
-        self.__load_nodes__()
+        
+        
     
-    def __load_nodes__(self) : 
+    def load_nodes(self) : 
         """
         Se encarga de prosesar los tags que poseen la siguiente estructura
         
@@ -36,6 +37,7 @@ class SVGManager :
         ["E4"] -> <ellipse fill="none" stroke="black"/>
         
         """
+        self.document = parse(self.svg_file_name)
         elements = self.document.documentElement
         #se obtiene del svg todos los elementos  que contienen el tag
         #<g> ... </g>
@@ -94,6 +96,49 @@ class SVGManager :
         #se cierra el archivo
         source.close()
 
-svg = SVGManager("afd.svg")
-svg.set_node_color("E4")
-svg.write_svg()
+    def gen_svg_from_automata(self, automata) :
+        #se crea un grafo dirigido
+        gr = pgv.AGraph(directed=True,rankdir="LR", strict=False)
+        estados = {}
+        inicio = automata.estado_inicial
+        #se otienen todos los estados del dict
+        estado_list = [] + automata.estados.values()
+        #se ordenan los estados
+        estado_list.sort()
+
+        for estado in estado_list :
+            if estado.final :
+                #si es un estado final se añade con un doble circulo
+                gr.add_node(estado.id, shape = "doublecircle")
+            else :
+                #si no es un estado final se añade con un circulo
+                gr.add_node(estado.id, shape = "circle")
+
+        #Se añade un nodo "invisible"
+        gr.add_node("",width="0",height="0")
+        #se añade un arcon entre el nodo vacio y el estado inicial del
+        #automata, con esto se obtiene el siguiente grafico :
+        # --Inicio--> (Estado Inicial)
+        gr.add_edge(("",inicio.id), label="Inicio", color='#8dad48')
+        #por cada arco definido se añade las relaciones entre los nodos
+        #definidos anteriormente
+        for arco in automata.arcos :
+            #se añaden los arcos entre los estados y el simbolo de
+            #de transicion, con esto se consigue un lo siguiente :
+            #(inicio) ---simbolo --->(destino)
+            gr.add_edge((arco.origen.id,arco.destino.id),\
+                        label=arco.simbolo ,color='#8dad48')
+
+            #gr.draw(str(arco.origen.id) + "-"+arco.simbolo + "--"+str(arco.destino.id) + '.svg')
+            #str(arco.origen) + "="+arco.simbolo + "=>"+str(arco.destino)
+
+        #se utiliza el agoritmo dot para el grafo
+        #neato|dot|twopi|circo|fdp|nop
+        gr.layout(prog='dot')
+        #se escribe el grafo resultado en un archivo
+        print self.svg_file_name
+        gr.draw(self.svg_file_name)
+
+#~ svg = SVGManager("afd.svg")
+#~ svg.set_node_color("E4")
+#~ svg.write_svg()

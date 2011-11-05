@@ -9,7 +9,7 @@ from thompson import *
 from subconjuntos import *
 from afd_minimo import AFD
 from bnf import *
-
+from simulador import *
 def draw(automata, file_name="automata") :
     #se crea un grafo dirigido
     gr = pgv.AGraph(directed=True,rankdir="LR", strict=False)
@@ -73,15 +73,24 @@ if __name__ == "__main__":
 
     print len(t.automatas[0].estados)
 
-    draw(t.automatas[0])
+    #draw(t.automatas[0])
     
     s = Subconjuntos(t.automatas[0])
     af = s.start_subconjutos()
     
-    draw(af, "afd")
+    #draw(af, "afd")
     afd = AFD(af)
     afd_min = afd.minimizar()
-    draw(afd_min, "minimo")
-
-    b = Bnf(afd_min)
-    b.start_bnf()
+    #draw(afd_min, "minimo")
+    sim = SimulardorAFD(afd_min, "aabc")
+    has_more = sim.next_state()
+    while has_more : 
+        direccion = raw_input()
+        
+        if direccion == "N" :
+            has_more = sim.next_state()
+        elif direccion == "P" :
+            has_more = sim.previous_state()
+            
+    #b = Bnf(afd_min)
+    #b.start_bnf()
