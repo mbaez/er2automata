@@ -73,8 +73,11 @@ if __name__ == "__main__":
 
     print len(t.automatas[0].estados)
 
-    #draw(t.automatas[0])
+    draw(t.automatas[0])
+    sim = SimuladorAFN(t.automatas[0], "abb")
+    sim.gen_camino()
     
+    """
     s = Subconjuntos(t.automatas[0])
     af = s.start_subconjutos()
     
@@ -94,3 +97,4 @@ if __name__ == "__main__":
             
     #b = Bnf(afd_min)
     #b.start_bnf()
+    """

@@ -102,8 +102,8 @@ class Arco :
         @rtype  : String
         @return : una cadena con la informacion de los arcos formateados
         """
-        return self.origen.id + " == " + self.simbolo +\
-               " ==> " + self.destino.id
+        return str(self.origen) + " == " + self.simbolo +\
+               " ==> " + str(self.destino)
 
 class Automata :
 

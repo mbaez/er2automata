@@ -3,6 +3,7 @@
 
 from svg_manager import *
 from afd_minimo import TablaTransiciones
+from keys import Keys
 
 """
 :author: Maximiniliano Báez González
@@ -128,3 +129,108 @@ class SimulardorAFD :
         self.simbol_index -= 1
         #se actualiza el svg
         self.svg.write_svg()
+
+class SimuladorAFN : 
+
+    def __init__(self, afn, secuencia_caracteres):
+        """
+        @type afn  : Automata
+        @param afn : automata apartir del cual se realiza al simulación
+        
+        @type secuencia_caracteres  : String
+        @param secuencia_caracteres : representa a la cadena de caracteres
+                                    a ser utilizados en la simulación.
+        """
+        self.afn =  afn
+        self.svg = SVGManager("afn_.svg")
+        self.svg.gen_svg_from_automata(afn)
+        #se procesa el afd
+        self.svg.load_nodes()
+        self.index = 0
+        self.secuencia_caracteres = secuencia_caracteres
+    
+    def gen_camino(self):
+        """
+        Este metodo utiliza la técnica de backtracking para validar la
+        secuencia de caracteres de entrada con el afn.
+        
+        @rtype  : Boolean
+        @return : True si la cadena es aceptada, en caso contrario
+                  retorna False
+        """
+        print self.secuencia_caracteres
+        print "="*10
+        self.camino = []
+        self.alternativas = []
+        
+        if self.__gen_camino(self.afn.get_estado_inicial()) :
+            #si es aceptada se imprime el camino que lleva a que la 
+            #cadena sea aceptada
+            for c in self.camino :
+                print c
+            return True
+        else :
+            #en caso de que la cadena sea rechazada se imprime las 
+            #combinaciones realizadas con el fin de validar la cadena.
+            index =0
+            for a in self.alternativas :
+                print "A" + str(index)
+                print "="*10
+                for e in a:
+                    print str(e) 
+                index += 1
+
+            return False
+        
+    def __gen_camino(self, origen):
+        """
+        Este metodo utiliza la técnica de backtracking para validar la
+        secuencia de caracteres de entrada con el afn.
+        
+        @type afn  : Estado
+        @param afn : estado origen apartir del cual se tratará de consumir
+                     la entrada
+        
+        @rtype  : Boolean
+        @return : True si la cadena es aceptada, en caso contrario
+                  retorna False
+        """
+        if len(self.secuencia_caracteres) == self.index :
+            #se consumio la totalidad de los caracteres
+            #si el estado es un estado final el algoritmo termina
+            return origen.final
+        #Se obtine el caracter actual a procesar.
+        caracter = self.secuencia_caracteres[self.index]
+        #se obienen  las transiciones del estado origen
+        for arco in self.afn.get_transicion(origen) :  
+
+            if caracter == arco.simbolo : 
+                self.index += 1
+                #anade al camino la posible solución
+                self.camino.append(arco)
+                #se realiza una llamada recursiva para tratar de 
+                #llegar al final
+                if self.__gen_camino(arco.destino) :
+                    #la cadena es aceptada
+                    return True
+                
+                #se añade como un alternativa
+                self.alternativas.append([]+self.camino)
+                #se acutaliza el indice de la secuencia de caracteres
+                self.index -= 1
+                #se elimina del camino debido a que no llevo a la
+                #solución
+                self.camino.pop()
+                
+            elif arco.simbolo == Keys.VACIO :
+                self.camino.append(arco)
+                if self.__gen_camino(arco.destino) :   
+                    #la cadena es aceptada
+                    return True
+                #se añada como una alternativa el camino
+                self.alternativas.append([]+self.camino)
+                #se elimina del camino debido a que no llevo a la
+                #solución
+                self.camino.pop()
+
+        return False
