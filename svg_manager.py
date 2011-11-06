@@ -96,7 +96,19 @@ class SVGManager :
         #se cierra el archivo
         source.close()
 
-    def gen_svg_from_automata(self, automata) :
+    def gen_svg_from_automata(self, automata, layout_prog="dot") :
+        """
+        Este método genera una imagen svg apartir de un automata
+        
+        @type automata  : Automata
+        @param automata : automata apartil del cual se generará la imagen
+        
+        @type layout_prog  : String 
+        @param layout_prog : indica el algoritmo que será utilizado para
+                             dibujar el grafo. los valores posibles son
+                             neato|dot|twopi|circo|fdp, el valor por 
+                             defecto es dot.
+        """
         #se crea un grafo dirigido
         gr = pgv.AGraph(directed=True,rankdir="LR", strict=False)
         estados = {}
@@ -129,16 +141,9 @@ class SVGManager :
             gr.add_edge((arco.origen.id,arco.destino.id),\
                         label=arco.simbolo ,color='#8dad48')
 
-            #gr.draw(str(arco.origen.id) + "-"+arco.simbolo + "--"+str(arco.destino.id) + '.svg')
-            #str(arco.origen) + "="+arco.simbolo + "=>"+str(arco.destino)
-
         #se utiliza el agoritmo dot para el grafo
-        #neato|dot|twopi|circo|fdp|nop
-        gr.layout(prog='dot')
+        #neato|dot|twopi|circo|fdp
+        gr.layout(prog=layout_prog)
         #se escribe el grafo resultado en un archivo
-        print self.svg_file_name
         gr.draw(self.svg_file_name)
 
-#~ svg = SVGManager("afd.svg")
-#~ svg.set_node_color("E4")
-#~ svg.write_svg()
