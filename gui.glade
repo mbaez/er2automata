@@ -21,7 +21,7 @@
                 </child>
                 <child>
                     <widget class="GtkHPaned" id="hpaned1">
-                        <property name="position">412</property>
+                        <property name="position">203</property>
                         <property name="position_set">True</property>
                         <property name="visible">True</property>
                         <child>
@@ -49,12 +49,15 @@
                                 <property name="visible">True</property>
                                 <child>
                                     <widget class="GtkButton" id="button1">
+                                        <property name="has_tooltip">True</property>
                                         <property name="is_focus">True</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Configuraciones</property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Configuraciones</property>
                                         <property name="visible">True</property>
                                         <signal handler="on_button1_clicked" name="clicked"/>
                                         <child>
-                                            <widget class="GtkImage" id="image12">
-                                                <property name="stock">gtk-add</property>
+                                            <widget class="GtkImage" id="image5">
+                                                <property name="stock">gtk-properties</property>
                                                 <property name="visible">True</property>
                                             </widget>
                                         </child>
@@ -65,7 +68,10 @@
                                 </child>
                                 <child>
                                     <widget class="GtkButton" id="button2">
+                                        <property name="has_tooltip">True</property>
                                         <property name="is_focus">True</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Analizar Expresion</property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Analizar Expresion</property>
                                         <property name="visible">True</property>
                                         <signal handler="on_button2_clicked" name="clicked"/>
                                         <child>
@@ -82,6 +88,10 @@
                                 </child>
                                 <child>
                                     <widget class="GtkButton" id="button3">
+                                        <property name="has_tooltip">True</property>
+                                        <property name="image_position">bottom</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Simular</property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Simular</property>
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkImage" id="image5">
@@ -136,6 +146,7 @@
                                                     <widget class="GtkLabel" id="label3">
                                                         <property name="visible">True</property>
                                                         <property name="xalign">0.0</property>
+                                                        <property name="yalign">0.0</property>
                                                     </widget>
                                                     <packing>
                                                         <property name="position">1</property>
@@ -149,6 +160,7 @@
                         </child>
                         <child>
                             <widget class="GtkNotebook" id="notebook1">
+                                <property name="is_focus">True</property>
                                 <property name="visible">True</property>
                                 <child>
                                     <widget class="GtkScrolledWindow" id="scrolledwindow2">

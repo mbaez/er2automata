@@ -39,13 +39,39 @@ class App:
 
     def on_window1_delete_event(self, widget, event):
         gtk.main_quit()
-
+    
+    
     def on_button1_clicked(self, widget):
+        """
+            Se encarga de abrir una ventana para que el usuario realice
+            las configuraciones
+        """
+        self.glade1 = gtk.glade.XML("configuraciones.glade")
+        
+        self.glade1.signal_autoconnect(self)
+        
+        self.glade1.get_widget("window1").show_all()
+        self.window2 = self.glade1.get_widget("window1")
+        
+        self.entry2 = self.glade1.get_widget("entry1")
+
+
+    def on_window2_delete_event(self, widget, event):
+        self.window2.destroy()
+        
+    def on_button4_clicked(self, widget):
+        """
+            Se encarga de agregar un alfabeto ingresado por el usuario 
+            
+        """
+
+    def on_button5_clicked(self, widget):
         """
             Se encarga de agregar una definicion regular ingresada por 
             el usuario a la tabla de simbolos
         """
-        texto = self.entry1.get_text()
+        
+        texto = self.entry2.get_text()
         pos = texto.index("=")
         
         def_r = texto[1:pos]
@@ -54,8 +80,13 @@ class App:
         keys = Keys()
         keys.set_tabla_simbolos_value_at(def_r,value)
         
+        self.window2.destroy()
+        
         tabla = keys.print_tabla_simbolos()
         self.label3.set_text('\n'.join([str(tabla[t]) for t in tabla]))
+    
+    def on_button6_clicked(self, widget):
+        self.window2.destroy()
 
     def on_button2_clicked(self, widget):
         """
