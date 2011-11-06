@@ -30,6 +30,8 @@ class Keys :
         self.alfabeto = "abcd"
         self.definicion_regular = "$"
         self.tabla_simbolos = {}
+        self.tabla = {}
+        self.j = 0
     
     def get_tabla_simbolos_value_at(self, def_regular):
         """
@@ -67,3 +69,17 @@ class Keys :
         analizar_def_reg.start()
         
         self.tabla_simbolos[def_regular] = analizar_def_reg.postfija
+        
+        t = def_regular + "->" + value
+        
+        self.tabla[self.j] = t
+        
+        self.j += 1
+    
+    def print_tabla_simbolos(self):
+        
+        i = 0 
+        while (i<len(self.tabla)):
+            print self.tabla[i]
+            i += 1
+        return self.tabla

@@ -17,6 +17,8 @@ class Bnf:
         self.afd_min = afd_min
         self.estados = [] + afd_min.get_estados().values()
         self.__cola_temp = deque()
+        self.lista = ""
+        self.bnf = {}
         
         #Renombra el id de los estados
         for es in self.estados:
@@ -24,7 +26,17 @@ class Bnf:
             es.id = "A" + es.id
             self.__cola_temp.append(es)
         
-
+    def print_bnf(self):
+        """
+        Este método se encarga de imprimir el BNF resultante
+        
+        """
+        j=0
+        while (j <len(self.bnf)):
+            print self.bnf[j]
+            j+=1
+        return self.bnf
+        
     def start_bnf(self):
         """
         Este método aplica el algoritmo para covertir un afd minimo en BNF.
@@ -32,12 +44,12 @@ class Bnf:
         """
         
         print "***** BNF ****"
-        
+        j = 0
         while (self.__cola_temp):
             
             e = self.__cola_temp.popleft()
             transiciones = self.afd_min.get_transicion(e)
-            lista = ""
+            self.lista = ""
             array = []
             
             for t in transiciones:
@@ -62,8 +74,14 @@ class Bnf:
             i = 0
             
             while (i < len(array)-1):
-                lista += str(array[i]) + "|"
+                self.lista += str(array[i]) + "|"
                 i += 1
-            lista += str(array[i])
+            self.lista += str(array[i])
             
-            print str(e.id) + "->" + lista
+            #Almacena en un array el Bnf
+            if (self.lista != ""):
+                b = (str(e.id) + "->" + self.lista)
+                self.bnf[j] = b
+                j +=1
+
+

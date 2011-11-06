@@ -10,6 +10,97 @@ from subconjuntos import *
 from afd_minimo import AFD
 from bnf import *
 from simulador import *
+
+import pygtk
+pygtk.require("2.0")
+import gtk, gtk.glade
+
+class App:
+ 
+    def __init__(self):
+        self.glade = gtk.glade.XML("gui.glade")
+        
+        self.glade.signal_autoconnect(self)
+        
+        self.glade.get_widget("window1").show_all()
+        
+        self.entry1 = self.glade.get_widget("entry1")
+
+        self.label3 = self.glade.get_widget("label3")
+        
+        self.label5 = self.glade.get_widget("label5")
+
+        self.image1 = self.glade.get_widget("image1")
+        
+        self.image2 = self.glade.get_widget("image2")
+        
+        self.image3 = self.glade.get_widget("image3")
+        
+
+    def on_window1_delete_event(self, widget, event):
+        gtk.main_quit()
+
+    def on_button1_clicked(self, widget):
+        """
+            Se encarga de agregar una definicion regular ingresada por 
+            el usuario a la tabla de simbolos
+        """
+        texto = self.entry1.get_text()
+        pos = texto.index("=")
+        
+        def_r = texto[1:pos]
+        value = texto[pos+1:len(texto)]
+        
+        keys = Keys()
+        keys.set_tabla_simbolos_value_at(def_r,value)
+        
+        tabla = keys.print_tabla_simbolos()
+        self.label3.set_text('\n'.join([str(tabla[t]) for t in tabla]))
+
+    def on_button2_clicked(self, widget):
+        """
+            Se en carga realizar el analisis lexico de la expresion 
+            ingresada por el usuario
+        """
+        texto = self.entry1.get_text()
+        
+        keys = Keys()
+        keys.set_tabla_simbolos_value_at("a_or_b","(a|b)")
+        print "Start.."
+        a = Analizador(texto, keys);
+        if a.start():
+            print "Done.." + str(a.postfija)
+        t = Thompson(a.postfija)
+
+        t.start()
+
+        print len(t.automatas[0].estados)
+
+        draw(t.automatas[0])
+        
+        s = Subconjuntos(t.automatas[0])
+        af = s.start_subconjutos()
+        
+        draw(af, "afd")
+        afd = AFD(af)
+        afd_min = afd.minimizar()
+        draw(afd_min, "minimo")
+
+        b = Bnf(afd_min)
+        b.start_bnf()
+        
+        self.image1.set_from_file('automata.svg')
+        self.image2.set_from_file('afd.svg')
+        self.image3.set_from_file('minimo.svg')
+        
+        tabla = keys.print_tabla_simbolos()
+        self.label3.set_text('\n'.join([str(tabla[t]) for t in tabla]))
+        
+        bnf = b.print_bnf()
+        self.label5.set_text('\n'.join([str(bnf[b]) for b in bnf]))
+
+
+
 def draw(automata, file_name="automata") :
     #se crea un grafo dirigido
     gr = pgv.AGraph(directed=True,rankdir="LR", strict=False)
@@ -56,6 +147,13 @@ def draw(automata, file_name="automata") :
 
 if __name__ == "__main__":
 
+    
+    try:
+        a = App()
+        gtk.main()
+    except KeyboardInterrupt:
+        pass
+    
     er = "$a_or_b;*.a.b.b"
 
     keys = Keys()
