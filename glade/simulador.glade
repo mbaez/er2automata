@@ -72,68 +72,11 @@
                     </widget>
                 </child>
                 <child>
-                    <widget class="GtkNotebook" id="notebook1">
+                    <widget class="GtkNotebook" id="notebook">
                         <property name="is_focus">True</property>
                         <property name="visible">True</property>
                         <child>
-                            <widget class="GtkVPaned" id="vpaned2">
-                                <property name="position">312</property>
-                                <property name="position_set">True</property>
-                                <property name="visible">True</property>
-                                <child>
-                                    <widget class="GtkScrolledWindow" id="scrolledwindow2">
-                                        <property name="visible">True</property>
-                                        <child>
-                                            <widget class="GtkViewport" id="viewport2">
-                                                <property name="visible">True</property>
-                                                <child>
-                                                    <widget class="GtkImage" id="afd_image">
-                                                        <property name="visible">True</property>
-                                                    </widget>
-                                                </child>
-                                            </widget>
-                                        </child>
-                                    </widget>
-                                </child>
-                                <child>
-                                    <widget class="GtkHButtonBox" id="hbuttonbox2">
-                                        <property name="layout_style">spread</property>
-                                        <property name="visible">True</property>
-                                        <child>
-                                            <widget class="GtkButton" id="atras_afd_button">
-                                                <property name="has_tooltip">True</property>
-                                                <property name="label">gtk-go-back</property>
-                                                <property name="tooltip_markup" context="yes" translatable="yes">Estado anterior</property>
-                                                <property name="tooltip_text" context="yes" translatable="yes">Estado anterior</property>
-                                                <property name="use_stock">True</property>
-                                                <property name="visible">True</property>
-                                                <signal handler="on_atras_afd_clicked" name="clicked"/>
-                                            </widget>
-                                        </child>
-                                        <child>
-                                            <widget class="GtkButton" id="adelante_afd_button">
-                                                <property name="has_tooltip">True</property>
-                                                <property name="is_focus">True</property>
-                                                <property name="label">gtk-go-forward</property>
-                                                <property name="tooltip_markup" context="yes" translatable="yes">Siguiente estado</property>
-                                                <property name="tooltip_text" context="yes" translatable="yes">Siguiente estado</property>
-                                                <property name="use_stock">True</property>
-                                                <property name="visible">True</property>
-                                                <signal handler="on_adelante_afd_clicked" name="clicked"/>
-                                            </widget>
-                                            <packing>
-                                                <property name="position">1</property>
-                                            </packing>
-                                        </child>
-                                    </widget>
-                                    <packing>
-                                        <property name="resize">True</property>
-                                    </packing>
-                                </child>
-                            </widget>
-                        </child>
-                        <child>
-                            <widget class="GtkVPaned" id="vpaned3">
+                            <widget class="GtkVPaned" id="afn_vpaned">
                                 <property name="position">311</property>
                                 <property name="position_set">True</property>
                                 <property name="visible">True</property>
@@ -168,6 +111,17 @@
                                             </widget>
                                         </child>
                                         <child>
+                                            <widget class="GtkButton" id="reproducir_afn_button">
+                                                <property name="label">gtk-media-play</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_reproducir_afn_clicked" name="clicked"/>
+                                            </widget>
+                                            <packing>
+                                                <property name="position">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
                                             <widget class="GtkButton" id="adelante_afn_button">
                                                 <property name="has_tooltip">True</property>
                                                 <property name="is_focus">True</property>
@@ -179,7 +133,79 @@
                                                 <signal handler="on_adelante_afn_clicked" name="clicked"/>
                                             </widget>
                                             <packing>
+                                                <property name="position">2</property>
+                                            </packing>
+                                        </child>
+                                    </widget>
+                                    <packing>
+                                        <property name="resize">True</property>
+                                    </packing>
+                                </child>
+                            </widget>
+                            <packing>
+                                <property name="tab_label" context="yes" translatable="yes">Page 2</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <widget class="GtkVPaned" id="afd_vpaned">
+                                <property name="position">312</property>
+                                <property name="position_set">True</property>
+                                <property name="visible">True</property>
+                                <child>
+                                    <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <widget class="GtkViewport" id="viewport2">
+                                                <property name="visible">True</property>
+                                                <child>
+                                                    <widget class="GtkImage" id="afd_image">
+                                                        <property name="visible">True</property>
+                                                    </widget>
+                                                </child>
+                                            </widget>
+                                        </child>
+                                    </widget>
+                                </child>
+                                <child>
+                                    <widget class="GtkHButtonBox" id="hbuttonbox2">
+                                        <property name="layout_style">spread</property>
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <widget class="GtkButton" id="atras_afd_button">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="label">gtk-go-back</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Estado anterior</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Estado anterior</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_atras_afd_clicked" name="clicked"/>
+                                            </widget>
+                                        </child>
+                                        <child>
+                                            <widget class="GtkButton" id="reproducir_afd_button">
+                                                <property name="is_focus">True</property>
+                                                <property name="label">gtk-media-play</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_reproducir_afd_clicked" name="clicked"/>
+                                            </widget>
+                                            <packing>
                                                 <property name="position">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <widget class="GtkButton" id="adelante_afd_button">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="is_focus">True</property>
+                                                <property name="label">gtk-go-forward</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Siguiente estado</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Siguiente estado</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_adelante_afd_clicked" name="clicked"/>
+                                            </widget>
+                                            <packing>
+                                                <property name="position">2</property>
                                             </packing>
                                         </child>
                                     </widget>
@@ -190,7 +216,71 @@
                             </widget>
                             <packing>
                                 <property name="position">1</property>
-                                <property name="tab_label" context="yes" translatable="yes">Page 2</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <widget class="GtkVPaned" id="min_vpaned">
+                                <property name="position">307</property>
+                                <property name="position_set">True</property>
+                                <property name="visible">True</property>
+                                <child>
+                                    <widget class="GtkScrolledWindow" id="scrolledwindow3">
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <widget class="GtkViewport" id="viewport3">
+                                                <property name="visible">True</property>
+                                                <child>
+                                                    <widget class="GtkImage" id="min_image">
+                                                        <property name="visible">True</property>
+                                                    </widget>
+                                                </child>
+                                            </widget>
+                                        </child>
+                                    </widget>
+                                </child>
+                                <child>
+                                    <widget class="GtkHButtonBox" id="hbuttonbox4">
+                                        <property name="layout_style">spread</property>
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <widget class="GtkButton" id="atras_min_button">
+                                                <property name="label">gtk-go-back</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_atras_min_clicked" name="clicked"/>
+                                            </widget>
+                                        </child>
+                                        <child>
+                                            <widget class="GtkButton" id="reproducir_min_button">
+                                                <property name="label">gtk-media-play</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_reproducir_min_clicked" name="clicked"/>
+                                            </widget>
+                                            <packing>
+                                                <property name="position">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <widget class="GtkButton" id="adelante_min_button">
+                                                <property name="label">gtk-go-forward</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_adelante_min_clicked" name="clicked"/>
+                                            </widget>
+                                            <packing>
+                                                <property name="position">2</property>
+                                            </packing>
+                                        </child>
+                                    </widget>
+                                    <packing>
+                                        <property name="resize">True</property>
+                                    </packing>
+                                </child>
+                            </widget>
+                            <packing>
+                                <property name="position">2</property>
+                                <property name="tab_label" context="yes" translatable="yes">Page 3</property>
                             </packing>
                         </child>
                     </widget>

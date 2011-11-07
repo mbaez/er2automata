@@ -183,11 +183,16 @@ Para utilizar las definiciones regulares utilice $def;</property>
                         </child>
                         <child>
                             <widget class="GtkNotebook" id="automatas_notebook">
+                                <property name="homogeneous">True</property>
                                 <property name="scrollable">True</property>
                                 <property name="tab_vborder">1</property>
                                 <property name="visible">True</property>
                                 <child>
                                     <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                                        <property name="extension_events">cursor</property>
+                                        <property name="has_tooltip">True</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Thompson</property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Thompson</property>
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkViewport" id="viewport1">
@@ -232,9 +237,17 @@ Para utilizar las definiciones regulares utilice $def;</property>
                                             </widget>
                                         </child>
                                     </widget>
+                                    <packing>
+                                        <property name="menu_label" context="yes" translatable="yes">Thompson</property>
+                                        <property name="reorderable">True</property>
+                                        <property name="tab_label" context="yes" translatable="yes">Thompson</property>
+                                    </packing>
                                 </child>
                                 <child>
                                     <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                                        <property name="has_tooltip">True</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Subconjuntos</property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Subconjuntos</property>
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkViewport" id="viewport2">
@@ -281,12 +294,17 @@ Para utilizar las definiciones regulares utilice $def;</property>
                                         </child>
                                     </widget>
                                     <packing>
+                                        <property name="menu_label" context="yes" translatable="yes">Subconjuntos</property>
                                         <property name="position">1</property>
-                                        <property name="tab_label" context="yes" translatable="yes">Page 2</property>
+                                        <property name="reorderable">True</property>
+                                        <property name="tab_label" context="yes" translatable="yes">Subconjuntos</property>
                                     </packing>
                                 </child>
                                 <child>
                                     <widget class="GtkScrolledWindow" id="scrolledwindow4">
+                                        <property name="has_tooltip">True</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Mínimo</property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Mínimo</property>
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkViewport" id="viewport4">
@@ -333,8 +351,10 @@ Para utilizar las definiciones regulares utilice $def;</property>
                                         </child>
                                     </widget>
                                     <packing>
+                                        <property name="menu_label" context="yes" translatable="yes">Mímino</property>
                                         <property name="position">2</property>
-                                        <property name="tab_label" context="yes" translatable="yes">Page 3</property>
+                                        <property name="reorderable">True</property>
+                                        <property name="tab_label" context="yes" translatable="yes">Mímino</property>
                                     </packing>
                                 </child>
                             </widget>

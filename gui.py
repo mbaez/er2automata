@@ -8,10 +8,12 @@ from subconjuntos import *
 from afd_minimo import *
 from bnf import *
 from simulador import *
-
+#librerias externas
 import pygtk
 pygtk.require("2.0")
 import gtk, gtk.glade
+import time
+import threading
 
 class EditorAlfabeto:
     def __init__(self, keys):
@@ -38,9 +40,11 @@ class EditorAlfabeto:
         
 
 class Simulador:
-    def __init__(self, afd, afn):
+    def __init__(self, afn, afd, min):
+        #gtk.gdk.threads_init()
         self.afd = afd
         self.afn = afn
+        self.min = min
         self.__init_params__()
         self.__init_widgets__()
         
@@ -48,8 +52,10 @@ class Simulador:
 
         self.sim_afd = None
         self.sim_afn = None
-        self.afn_svg="images/sim_afn.svg"
-        self.afd_svg="images/sim_afd.svg"
+        self.sim_min = None
+        self.afn_svg="images/afn.svg"
+        self.afd_svg="images/afd.svg"
+        self.min_svg="images/afd_min.svg"
     
     def __init_widgets__(self):
         self.glade = gtk.glade.XML("glade/simulador.glade")
@@ -58,19 +64,31 @@ class Simulador:
         self.main_window.show_all()
         self.secuencia_entry = self.glade.get_widget("secuencia_entry")
         
-        self.aplicar_button = self.glade.get_widget("aplicar_button")
-        self.actualizar_button = self.glade.get_widget("actualizar_button")
+        self.afn_vpaned = self.glade.get_widget("afn_vpaned")
+        self.afn_vpaned.set_sensitive(False)
         
-        self.atras_afd_button = self.glade.get_widget("atras_afd_button")
-        self.adelante_afd_button = self.glade.get_widget("adelante_afd_button")
-        self.afd_image = self.glade.get_widget("afd_image")
+        self.afd_vpaned = self.glade.get_widget("afd_vpaned")
+        self.afd_vpaned.set_sensitive(False)
+        
+        self.min_vpaned = self.glade.get_widget("min_vpaned")
+        self.min_vpaned.set_sensitive(False)
 
-        
-        self.atras_afn_button = self.glade.get_widget("atras_afn_button")
-        self.adelante_afn_button = self.glade.get_widget("adelante_afn_button")
         self.afn_image = self.glade.get_widget("afn_image")
+        self.afd_image = self.glade.get_widget("afd_image")
+        self.min_image = self.glade.get_widget("min_image")
         
-    
+        self.afd_image.set_from_file(self.afd_svg)
+        self.afn_image.set_from_file(self.afn_svg)
+        self.min_image.set_from_file(self.min_svg)
+        
+        self.__rename_notebook_tabs__()
+        
+    def __rename_notebook_tabs__ (self):
+        notebook = self.glade.get_widget("notebook")
+        notebook.set_tab_label_text(notebook.get_nth_page(0),"Thompson")
+        notebook.set_tab_label_text(notebook.get_nth_page(1),"Subconjuntos")
+        notebook.set_tab_label_text(notebook.get_nth_page(2),"Mínimo")
+        
     def on_aplicar_clicked(self, widget):
         secuencia = self.secuencia_entry.get_text()
         
@@ -79,6 +97,13 @@ class Simulador:
         
         self.sim_afn = SimuladorAFN(self.afn, secuencia, self.afn_svg)
         self.afn_image.set_from_file(self.afn_svg)
+        
+        self.sim_min = SimuladorAFD(self.min, secuencia, self.min_svg)
+        self.min_image.set_from_file(self.min_svg)
+        
+        self.afn_vpaned.set_sensitive(True)
+        self.afd_vpaned.set_sensitive(True)
+        self.min_vpaned.set_sensitive(True)
         
     def on_actualizar_clicked(self, widget):
         self.on_aplicar_clicked(None)
@@ -92,6 +117,13 @@ class Simulador:
         if self.sim_afn != None :
             if self.sim_afn.next_state(): 
                 self.afn_image.set_from_file(self.afn_svg)
+                
+    def on_reproducir_afn_clicked(self, widget):
+        #gtk.gdk.threads_enter()
+        #thread=threading.Thread(target=self.start_afn_simulation)
+        #thread.start()
+        #gtk.gdk.threads_enter()
+        pass
         
     def on_atras_afd_clicked(self, widget):
         if self.sim_afd != None :
@@ -102,7 +134,42 @@ class Simulador:
         if self.sim_afd != None :
             if self.sim_afd.next_state(): 
                 self.afd_image.set_from_file(self.afd_svg)
-    
+
+    def on_reproducir_afd_clicked(self, widget):
+        #~ gtk.gdk.threads_enter()
+        #~ thread=threading.Thread(target=self.start_afd_simulation)
+        #~ thread.start()
+        #~ gtk.gdk.threads_leave()
+        pass
+        
+    def on_atras_min_clicked(self, widget):
+        if self.sim_min != None :
+            if self.sim_min.previous_state(): 
+                self.min_image.set_from_file(self.min_svg)
+        
+    def on_adelante_min_clicked(self, widget):
+        if self.sim_min != None :
+            if self.sim_min.next_state(): 
+                self.min_image.set_from_file(self.min_svg)
+
+    def on_reproducir_min_clicked(self, widget):
+        #~ gtk.gdk.threads_enter()
+        #~ thread=threading.Thread(target=self.start_afd_simulation)
+        #~ thread.start()
+        #~ gtk.gdk.threads_leave()
+        pass
+        
+    def start_afd_simulation(self) :
+        while self.sim_afd.next_state() :
+            self.afd_image.set_from_file(self.afd_svg)
+            time.sleep(1)
+        
+    def start_afn_simulation(self) :
+        while self.sim_afn.next_state() :
+            self.afn_image.set_from_file(self.afn_svg)
+            time.sleep(1)
+        
+        
 class App:
  
     def __init__(self):
@@ -113,11 +180,20 @@ class App:
         self.main_window = self.glade.get_widget("main_window")
         self.main_window.show_all()
         self.expresion_entry = self.glade.get_widget("expresion_entry")
+        self.simulacion_button = self.glade.get_widget("simulacion_button")
         
+        self.simulacion_button.set_sensitive(False)
         self.__init_tree_view__()
         self.__init_automata_params__()
         self.__init_canvas__()
-
+        self.__rename_notebook_tabs__()
+        
+    def __rename_notebook_tabs__ (self):
+        notebook = self.glade.get_widget("automatas_notebook")
+        notebook.set_tab_label_text(notebook.get_nth_page(0),"Thompson")
+        notebook.set_tab_label_text(notebook.get_nth_page(1),"Subconjuntos")
+        notebook.set_tab_label_text(notebook.get_nth_page(2),"Mínimo")
+        
     def __init_tree_view__(self):
         """
         Este método inicializa los treeview de la aplicacion, obiene
@@ -180,7 +256,7 @@ class App:
         """
         Este método se encarga de inicializar el simulador
         """        
-        Simulador(self.afd_min ,self.afn)
+        Simulador(self.afn,self.afd,self.afd_min)
 
     def on_ejecutar_clicked(self, widget):
         """
@@ -211,9 +287,15 @@ class App:
         self.bnf = _bnf.start_bnf()
         #se limpia el store del bnf
         self.__clean_store__(self.bnf_store)
+        self.__clean_store__(self.minimo_store)
+        self.__clean_store__(self.thompson_store)
+        self.__clean_store__(self.subconjuntos_store)
         #se añaden el store del treeview
         for produccion in self.bnf : 
             self.bnf_store.append([self.bnf[produccion]])
+        
+        #se habilita el boton de la simulación
+        self.simulacion_button.set_sensitive(True)
 
     def __ejecutar_thompson(self, expresion_postfija):
         """
@@ -280,7 +362,7 @@ class App:
     def on_editar_clicked(self, widget):
         EditorAlfabeto(self.keys)
         
-        
+
     ###################################################################
     def __clean_store__(self, store) :
         """
@@ -328,44 +410,3 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         pass
     
-    #~ er = "(a|b)+"
-    #~ 
-    #~ keys = Keys()
-    #~ keys.set_tabla_simbolos_value_at("a_or_b","(a|b)")
-    #~ print er
-    #~ print "Start.."
-    #~ #tokens = StringTokenizer (er, keys)
-    #~ a = Analizador(er, keys);
-    #~ if a.start():
-        #~ print "Done.." + str(a.postfija)
-    #~ 
-    #~ t = Thompson(a.postfija)
-
-    #~ t.start()
-
-    #~ print len(t.automatas[0].estados)
-    #~ 
-    #~ draw(t.automatas[0])
-    #~ sim = SimuladorAFN(t.automatas[0], "abb")
-    #~ sim.gen_camino()
-    #~ 
-    #~ s = Subconjuntos(t.automatas[0])
-    #~ af = s.start_subconjutos()
-    #~ 
-    #~ draw(af, "afd")
-    #~ afd = AFD(af)
-    #~ afd_min = afd.minimizar()
-    #~ draw(afd_min, "minimo")
-    #~ sim = SimulardorAFD(afd_min, "aabc")
-    #~ has_more = sim.next_state()
-    #~ while has_more : 
-        #~ direccion = raw_input()
-        #~ 
-        #~ if direccion == "N" :
-            #~ has_more = sim.next_state()
-        #~ elif direccion == "P" :
-            #~ has_more = sim.previous_state()
-            #~ 
-    #~ #b = Bnf(afd_min)
-    #~ #b.start_bnf()
-

@@ -34,7 +34,7 @@ class SimuladorAFD :
         self.tabla_transiciones = TablaTransiciones(afd)
         self.tabla_transiciones.build_table()
         #estados que representaran las transiciones
-        self.estado_origen = afd.get_estado_inicial()
+        self.estado_origen = self.afd.get_estado_inicial()
         self.estado_destino = None
         self.estado_anterior = {}
         #el indice del caracter acualtmente procesado
@@ -53,13 +53,15 @@ class SimuladorAFD :
         """
         #si es el estado inicial se pinta unicamente ese estado
         if self.simbol_index == -1 :
+            print self.svg.svg_file_name
             self.svg.set_node_color(self.estado_origen.id)
             self.svg.write_svg()
             self.simbol_index += 1
+            print self.estado_origen
             
         elif self.simbol_index  >= 0 and \
             self.simbol_index < len(self.secuencia_caracteres): 
-            
+            print "next"
             self.__next_state()
         else :
             return False
@@ -164,7 +166,7 @@ class SimuladorAFN :
                   retorna False
         """
         print self.secuencia_caracteres
-        print "="*10
+        print "*"*10
         self.camino = []
         self.alternativas = []
         
@@ -172,7 +174,7 @@ class SimuladorAFN :
             #si es aceptada se imprime el camino que lleva a que la 
             #cadena sea aceptada
             for c in self.camino :
-                print c
+                print "=> " +str(c)
             return True
         else :
             #en caso de que la cadena sea rechazada se imprime las 
@@ -203,12 +205,26 @@ class SimuladorAFN :
         if len(self.secuencia_caracteres) == self.index :
             #se consumio la totalidad de los caracteres
             #si el estado es un estado final el algoritmo termina
-            return origen.final
+            if origen.final :
+                return True
+            
+            final = True 
+            for arco in self.afn.get_transicion(origen):
+                if arco.simbolo == Keys.VACIO :
+                    self.camino.append(arco)
+                    if self.__gen_camino(arco.destino) :
+                        return True
+                    
+                    self.alternativas.append([]+self.camino)
+                    self.camino.pop()
+
+                    
+            if final :
+                return origen.final
         #Se obtine el caracter actual a procesar.
         caracter = self.secuencia_caracteres[self.index]
         #se obienen  las transiciones del estado origen
         for arco in self.afn.get_transicion(origen) :  
-
             if caracter == arco.simbolo : 
                 self.index += 1
                 #anade al camino la posible solución
@@ -241,8 +257,11 @@ class SimuladorAFN :
         return False
 
     def next_state(self):
+        
         if self.camino == [] :
             self.state = self.gen_camino()
+            if not self.state :
+                return False
             self.index = 0
             e = self.camino[self.index]
             self.svg.set_node_color(e.origen.id)
