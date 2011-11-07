@@ -53,15 +53,15 @@ class SimuladorAFD :
         """
         #si es el estado inicial se pinta unicamente ese estado
         if self.simbol_index == -1 :
-            print self.svg.svg_file_name
+            #print self.svg.svg_file_name
             self.svg.set_node_color(self.estado_origen.id)
             self.svg.write_svg()
             self.simbol_index += 1
-            print self.estado_origen
+            #print self.estado_origen
             
         elif self.simbol_index  >= 0 and \
             self.simbol_index < len(self.secuencia_caracteres): 
-            print "next"
+            
             self.__next_state()
         else :
             return False

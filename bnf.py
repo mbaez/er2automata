@@ -14,16 +14,16 @@ from stack import *
 class Bnf:
     
     def __init__(self, afd_min):
-        self.afd_min = afd_min
-        self.estados = [] + afd_min.get_estados().values()
+        self.afd_min = afd_min.copy()
+        self.estados = [] + self.afd_min.get_estados().values()
         self.__cola_temp = deque()
         self.lista = ""
         self.bnf = {}
         
         #Renombra el id de los estados
         for es in self.estados:
-            print es.id
-            es.id = "A" + es.id
+            
+            es.id = "A" + es.id[:1]
             self.__cola_temp.append(es)
         
     def print_bnf(self):
@@ -53,10 +53,11 @@ class Bnf:
             array = []
             
             for t in transiciones:
+                print t
                 e_destino = t.destino
                 e_simbolo = t.simbolo
                 
-                if (e_simbolo.find(Keys.VACIO) < 0):
+                if (e_simbolo != Keys.VACIO):
                     c = ""
                     c = str(e_simbolo) + str(e_destino.id)
                     array.append(c)

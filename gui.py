@@ -92,6 +92,10 @@ class Simulador:
     def on_aplicar_clicked(self, widget):
         secuencia = self.secuencia_entry.get_text()
         
+        self.sim_afd2 = SimuladorAFD(self.afd.copy(), secuencia, "images/init.svg" )
+        self.sim_afd2.next_state()
+        #self.afd_image.set_from_file(self.afd_svg)
+        
         self.sim_afd = SimuladorAFD(self.afd, secuencia, self.afd_svg)
         self.afd_image.set_from_file(self.afd_svg)
         

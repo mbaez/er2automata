@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import pygraphviz as pgv
+import re
 from xml.dom.minidom import parse
 
 class SVGManager : 
@@ -38,10 +39,12 @@ class SVGManager :
         
         """
         self.document = parse(self.svg_file_name)
-        elements = self.document.documentElement
+        self.document.normalize()
+        self.elements = self.document.documentElement
+        self.polygons = []
         #se obtiene del svg todos los elementos  que contienen el tag
         #<g> ... </g>
-        for polygon in elements.getElementsByTagName("g") :
+        for polygon in self.elements.getElementsByTagName("g") :
             #se procesan unicamente aquellos tags que son del tipo nodo
             if polygon.attributes["class"].value == "node" :
                 #se obiene el tag <title>.. </title>
@@ -52,10 +55,12 @@ class SVGManager :
                     label = str(title.firstChild.data).strip()
                     #se obtiene el tag <ellipse>... </ellipse>
                     ellipse = polygon.getElementsByTagName("ellipse")[0]
+                    self.polygons.append(ellipse)
                     #se guarda en el diccionario el id del estado y la 
                     #referencia a la figura
                     # ["E4"] -> <ellipse fill="none" stroke="black"/>
-                    self.nodes[label] = ellipse
+                    #print ellipse
+                    self.nodes[label] = ellipse#len(self.polygons)-1
                 
     def set_node_color(self, node_id, color="#ADD8E6") :
         """
@@ -71,8 +76,11 @@ class SVGManager :
         @param color : color que sera asignado al estado identificado por
                        node_id
         """
+        #print node_id
         if self.nodes.has_key(node_id) :
             self.nodes[node_id].attributes["fill"].value = color
+            
+            #print  node_id + "->" +  self.nodes[node_id].attributes["fill"].value
 
     
     def write_svg(self, svg_file_name=None) :
@@ -90,9 +98,10 @@ class SVGManager :
         if svg_file_name == None : 
             svg_file_name =  self.svg_file_name
         #se el archivo, si no existe se crea 
-        source = open(svg_file_name, 'w')
+        source = open(svg_file_name, 'w+')
         # se escribe en el archivo el contenido del documento xml actual
-        source.write(self.document.toprettyxml())
+        ugly = self.document.toxml()
+        source.write(ugly)
         #se cierra el archivo
         source.close()
 

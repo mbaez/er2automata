@@ -227,7 +227,8 @@ class Automata :
         #se obiene el id del estado y se añade la terminación CP que
         #indica que este estado es una copia.
         estado_inicial_str = self.estado_inicial.id + Keys.COPY_LABEL
-        estado_final_str = self.estado_final.id + Keys.COPY_LABEL
+        if self.estado_final!= None :
+            estado_final_str = self.estado_final.id + Keys.COPY_LABEL
 
         #se establecen los estados inicial y final de automata copia.
         #Los estados inicial y final son obtenidos de la lista de
@@ -235,7 +236,8 @@ class Automata :
         #anteriormente. La obtención de los estados se realiza desta
         #forma para mantener las referencias entre los objetos
         automata.estado_inicial = automata.estados[estado_inicial_str]
-        automata.estado_final = automata.estados[estado_final_str]
+        if self.estado_final!= None :
+            automata.estado_final = automata.estados[estado_final_str]
 
         for arco in self.arcos :
             #por cada arco existente se obtiene los id's de los estados
