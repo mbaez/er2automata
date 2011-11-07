@@ -125,13 +125,22 @@ class App:
         al procesar el archivo .glade
         """
         self.bnf_treeview = self.glade.get_widget("bnf_treeview")
-        self.messages_treeview = self.glade.get_widget("messages_treeview")
+        self.thompson_treeview = self.glade.get_widget("thompson_treeview")
+        self.subconjuntos_treeview = self.glade.get_widget("subconjuntos_treeview")
+        self.minimo_treeview = self.glade.get_widget("minimo_treeview")
+        
         self.tabla_simbolos_treeview = self.glade.get_widget("tabla_simbolos_treeview")
         
         self.bnf_store = self.build_tree_view("BNF",self.bnf_treeview)
+        label = "Tabla de transiciones"
+        self.thompson_store = self.build_tree_view(label,\
+                self.thompson_treeview)
         
-        self.message_store = self.build_tree_view("Messages",\
-                self.messages_treeview)
+        self.subconjuntos_store = self.build_tree_view(label,\
+                self.subconjuntos_treeview)
+        
+        self.minimo_store = self.build_tree_view(label,\
+                self.minimo_treeview)
                 
         self.tabla_simbolos_store = self.build_tree_view(\
                 "Tabla de Simbolos",self.tabla_simbolos_treeview)
@@ -161,12 +170,16 @@ class App:
 
     
     def on_main_delete_event(self, widget, event):
+        """
+        Este metodo se encarga de salir del bucle de enventos de gtk 
+        para finalizar la aplicación
+        """
         gtk.main_quit()
     
     def on_simulacion_clicked(self, widget):
         """
-        """
-        print "Simular"
+        Este método se encarga de inicializar el simulador
+        """        
         Simulador(self.afd_min ,self.afn)
 
     def on_ejecutar_clicked(self, widget):
@@ -184,30 +197,13 @@ class App:
         except Exception as inst:
             self.show_error_dialog(str(inst))
             return;
-
-        thompson = Thompson(a.postfija)
-        self.afn = thompson.start()
-        #se dibuja el automata
-        svg = SVGManager(self.afn_svg)
-        svg.gen_svg_from_automata(self.afn)
-        #se actualiza las el canvas
-        self.thompson_image.set_from_file(self.afn_svg)
-
-        subconjuntos = Subconjuntos(self.afn, self.keys)
-        self.afd = subconjuntos.start_subconjutos()
-        #se dibuja el automata
-        svg = SVGManager(self.afd_svg)
-        svg.gen_svg_from_automata(self.afd)
-        #se actualiza las el canvas
-        self.subconjutos_image.set_from_file(self.afd_svg)
         
-        _afd = AFD(self.afd)
-        self.afd_min = _afd.minimizar()
-        #se dibuja el automata
-        svg = SVGManager(self.afd_min_svg)
-        svg.gen_svg_from_automata(self.afd_min)
-        #se actualiza las el canvas
-        self.minimo_image.set_from_file(self.afd_min_svg)
+        self.__ejecutar_thompson(a.postfija)
+        
+        self.__ejecutar_subconjutos()
+        
+        self.__ejecutar_minimo()
+
         #se reinicia el indice de los estados
         Estado.ID = 1
         #se obtiene el bnf apartir del afd_minimo
@@ -219,7 +215,49 @@ class App:
         for produccion in self.bnf : 
             self.bnf_store.append([self.bnf[produccion]])
 
+    def __ejecutar_thompson(self, expresion_postfija):
+        """
+        Este método se encarga de ejecutar el algoritmo de thompson
+        """
+        thompson = Thompson(expresion_postfija)
+        self.afn = thompson.start()
+        #se dibuja el automata
+        svg = SVGManager(self.afn_svg)
+        svg.gen_svg_from_automata(self.afn)
+        #se actualiza las el canvas
+        self.thompson_image.set_from_file(self.afn_svg)
+        
+        for arco in self.afn.arcos :
+            self.thompson_store.append([str(arco)])
     
+    def __ejecutar_subconjutos(self):
+        """
+        Este método se encarga de ejecutar el algoritmo de subconjuntos
+        """
+        subconjuntos = Subconjuntos(self.afn, self.keys)
+        self.afd = subconjuntos.start_subconjutos()
+        #se dibuja el automata
+        svg = SVGManager(self.afd_svg)
+        svg.gen_svg_from_automata(self.afd)
+        #se actualiza las el canvas
+        self.subconjutos_image.set_from_file(self.afd_svg)
+        for arco in self.afd.arcos :
+            self.subconjuntos_store.append([str(arco)])
+        
+    def __ejecutar_minimo(self):
+        """
+        Este método se encarga de ejecutar el algoritmo de minimización
+        """
+        _afd = AFD(self.afd)
+        self.afd_min = _afd.minimizar()
+        #se dibuja el automata
+        svg = SVGManager(self.afd_min_svg)
+        svg.gen_svg_from_automata(self.afd_min)
+        #se actualiza las el canvas
+        self.minimo_image.set_from_file(self.afd_min_svg)
+        for arco in self.afd_min.arcos :
+            self.minimo_store.append([str(arco)])
+            
     def on_anhadir_clicked(self, widget):
         """
         Se encarga de agregar una definicion regular ingresada por 
@@ -272,6 +310,7 @@ class App:
     
     def build_tree_view(self, column, tree_view):
         """
+        Este metodo se encarga de construir un tree_view
         """
         store_model = gtk.ListStore(str)
         tree_view.set_model(store_model)

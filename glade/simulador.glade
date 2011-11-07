@@ -26,7 +26,10 @@
                                 <property name="visible">True</property>
                                 <child>
                                     <widget class="GtkEntry" id="secuencia_entry">
+                                        <property name="has_tooltip">True</property>
                                         <property name="is_focus">True</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Introduzca una secuencia de caracteres </property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Introduzca una secuencia de caracteres </property>
                                         <property name="visible">True</property>
                                     </widget>
                                 </child>
@@ -36,7 +39,10 @@
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkButton" id="aplicar_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="label">gtk-apply</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Inicia la simulación apartir de la secuencia de caracteres</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Inicia la simulación apartir de la secuencia de caracteres</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_aplicar_clicked" name="clicked"/>
@@ -44,7 +50,10 @@
                                         </child>
                                         <child>
                                             <widget class="GtkButton" id="actualizar_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="label">gtk-refresh</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Actualiza los parametros de la simulación</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Actualiza los parametros de la simulación</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_actualizar_clicked" name="clicked"/>
@@ -92,7 +101,10 @@
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkButton" id="atras_afd_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="label">gtk-go-back</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Estado anterior</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Estado anterior</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_atras_afd_clicked" name="clicked"/>
@@ -100,7 +112,11 @@
                                         </child>
                                         <child>
                                             <widget class="GtkButton" id="adelante_afd_button">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="is_focus">True</property>
                                                 <property name="label">gtk-go-forward</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Siguiente estado</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Siguiente estado</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_adelante_afd_clicked" name="clicked"/>
@@ -142,7 +158,10 @@
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkButton" id="atras_afn_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="label">gtk-go-back</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Estado anterior</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Estado anterior</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_atras_afn_clicked" name="clicked"/>
@@ -150,7 +169,11 @@
                                         </child>
                                         <child>
                                             <widget class="GtkButton" id="adelante_afn_button">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="is_focus">True</property>
                                                 <property name="label">gtk-go-forward</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Siguiente estado</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Siguiente estado</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_adelante_afn_clicked" name="clicked"/>

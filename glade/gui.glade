@@ -11,7 +11,9 @@
             <column type="gchararray"/>
         </columns>
     </widget>
-    <widget class="GtkListStore" id="model1"/>
+    <widget class="GtkListStore" id="model6"/>
+    <widget class="GtkListStore" id="model5"/>
+    <widget class="GtkListStore" id="model4"/>
     <widget class="GtkWindow" id="main_window">
         <property name="default_height">600</property>
         <property name="default_width">800</property>
@@ -19,14 +21,15 @@
         <property name="title" context="yes" translatable="yes">Er2Automata</property>
         <signal handler="on_main_delete_event" name="delete-event"/>
         <child>
-            <widget class="GtkVPaned" id="vpaned1">
-                <property name="position">473</property>
+            <widget class="GtkVPaned" id="vpaned3">
+                <property name="position">47</property>
                 <property name="position_set">True</property>
                 <property name="visible">True</property>
                 <child>
-                    <widget class="GtkVPaned" id="vpaned3">
-                        <property name="position">38</property>
-                        <property name="position_set">True</property>
+                    <widget class="GtkFrame" id="frame1">
+                        <property name="label" context="yes" translatable="yes">Definiciones Regulares</property>
+                        <property name="shadow">none</property>
+                        <property name="shadow_type">none</property>
                         <property name="visible">True</property>
                         <child>
                             <widget class="GtkHPaned" id="hpaned1">
@@ -36,7 +39,15 @@
                                 <property name="visible">True</property>
                                 <child>
                                     <widget class="GtkEntry" id="expresion_entry">
+                                        <property name="has_tooltip">True</property>
                                         <property name="is_focus">True</property>
+                                        <property name="primary_icon_activatable">True</property>
+                                        <property name="tooltip_markup" context="yes" translatable="yes">Introduzca las definiciones regulares de la siguiente forma:
+def=expresion y seleccione la opción de Añadir 
+Para utilizar las definiciones regulares utilice $def;</property>
+                                        <property name="tooltip_text" context="yes" translatable="yes">Introduzca las definiciones regulares de la siguiente forma:
+def=expresion y seleccione la opción de Añadir 
+Para utilizar las definiciones regulares utilice $def;</property>
                                         <property name="visible">True</property>
                                     </widget>
                                 </child>
@@ -46,8 +57,11 @@
                                         <property name="visible">True</property>
                                         <child>
                                             <widget class="GtkButton" id="anhadir_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="is_focus">True</property>
                                                 <property name="label">gtk-add</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Añade una definición regular de la forma def=expresión</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Añade una definición regular de la forma def=expresión</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_anhadir_clicked" name="clicked"/>
@@ -55,8 +69,11 @@
                                         </child>
                                         <child>
                                             <widget class="GtkButton" id="ejecutar_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="is_focus">True</property>
                                                 <property name="label">gtk-execute</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Ejecuta los algoritmos</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Ejecuta los algoritmos</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_ejecutar_clicked" name="clicked"/>
@@ -67,8 +84,11 @@
                                         </child>
                                         <child>
                                             <widget class="GtkButton" id="editar_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="is_focus">True</property>
                                                 <property name="label">gtk-edit</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Editar alfabeto</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Editar alfabeto</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_editar_clicked" name="clicked"/>
@@ -79,7 +99,10 @@
                                         </child>
                                         <child>
                                             <widget class="GtkButton" id="simulacion_button">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="is_focus">True</property>
+                                                <property name="tooltip_markup" context="yes" translatable="yes">Iniciar simulación</property>
+                                                <property name="tooltip_text" context="yes" translatable="yes">Iniciar simulación</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_simulacion_clicked" name="clicked"/>
                                                 <child>
@@ -100,119 +123,56 @@
                                 </child>
                             </widget>
                         </child>
+                    </widget>
+                </child>
+                <child>
+                    <widget class="GtkHPaned" id="hpaned2">
+                        <property name="position">164</property>
+                        <property name="position_set">True</property>
+                        <property name="visible">True</property>
                         <child>
-                            <widget class="GtkHPaned" id="hpaned2">
-                                <property name="position">164</property>
+                            <widget class="GtkVPaned" id="vpaned4">
+                                <property name="position">278</property>
                                 <property name="position_set">True</property>
                                 <property name="visible">True</property>
                                 <child>
-                                    <widget class="GtkVPaned" id="vpaned4">
-                                        <property name="position">199</property>
-                                        <property name="position_set">True</property>
+                                    <widget class="GtkTreeView" id="tabla_simbolos_treeview">
+                                        <property name="border_width">1</property>
+                                        <property name="enable_grid_lines">horizontal</property>
+                                        <property name="is_focus">True</property>
+                                        <property name="model">model2</property>
+                                        <property name="search_column">0</property>
                                         <property name="visible">True</property>
                                         <child>
-                                            <widget class="GtkTreeView" id="tabla_simbolos_treeview">
-                                                <property name="border_width">1</property>
-                                                <property name="enable_grid_lines">horizontal</property>
-                                                <property name="is_focus">True</property>
-                                                <property name="model">model2</property>
-                                                <property name="search_column">0</property>
-                                                <property name="visible">True</property>
+                                            <widget class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                                <property name="title" context="yes" translatable="yes">Tabla de Simbolos</property>
                                                 <child>
-                                                    <widget class="GtkTreeViewColumn" id="treeviewcolumn2">
-                                                        <property name="title" context="yes" translatable="yes">Tabla de Simbolos</property>
-                                                        <child>
-                                                            <widget class="GtkCellRendererText" id="treeviewcolumn2-renderer1"/>
-                                                            <attributes>
-                                                                <attribute name="text">0</attribute>
-                                                            </attributes>
-                                                        </child>
-                                                    </widget>
+                                                    <widget class="GtkCellRendererText" id="treeviewcolumn2-renderer1"/>
+                                                    <attributes>
+                                                        <attribute name="text">0</attribute>
+                                                    </attributes>
                                                 </child>
                                             </widget>
-                                        </child>
-                                        <child>
-                                            <widget class="GtkTreeView" id="bnf_treeview">
-                                                <property name="border_width">1</property>
-                                                <property name="enable_grid_lines">horizontal</property>
-                                                <property name="model">model3</property>
-                                                <property name="search_column">0</property>
-                                                <property name="visible">True</property>
-                                                <child>
-                                                    <widget class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                                        <property name="title" context="yes" translatable="yes">BNF</property>
-                                                        <child>
-                                                            <widget class="GtkCellRendererText" id="treeviewcolumn3-renderer1"/>
-                                                            <attributes>
-                                                                <attribute name="text">0</attribute>
-                                                            </attributes>
-                                                        </child>
-                                                    </widget>
-                                                </child>
-                                            </widget>
-                                            <packing>
-                                                <property name="resize">True</property>
-                                            </packing>
                                         </child>
                                     </widget>
                                 </child>
                                 <child>
-                                    <widget class="GtkNotebook" id="automatas_notebook">
-                                        <property name="scrollable">True</property>
-                                        <property name="tab_vborder">1</property>
+                                    <widget class="GtkTreeView" id="bnf_treeview">
+                                        <property name="border_width">1</property>
+                                        <property name="enable_grid_lines">horizontal</property>
+                                        <property name="model">model3</property>
+                                        <property name="search_column">0</property>
                                         <property name="visible">True</property>
                                         <child>
-                                            <widget class="GtkScrolledWindow" id="scrolledwindow1">
-                                                <property name="visible">True</property>
+                                            <widget class="GtkTreeViewColumn" id="treeviewcolumn3">
+                                                <property name="title" context="yes" translatable="yes">BNF</property>
                                                 <child>
-                                                    <widget class="GtkViewport" id="viewport1">
-                                                        <property name="visible">True</property>
-                                                        <child>
-                                                            <widget class="GtkImage" id="thompson_image">
-                                                                <property name="visible">True</property>
-                                                            </widget>
-                                                        </child>
-                                                    </widget>
+                                                    <widget class="GtkCellRendererText" id="treeviewcolumn3-renderer1"/>
+                                                    <attributes>
+                                                        <attribute name="text">0</attribute>
+                                                    </attributes>
                                                 </child>
                                             </widget>
-                                        </child>
-                                        <child>
-                                            <widget class="GtkScrolledWindow" id="scrolledwindow2">
-                                                <property name="visible">True</property>
-                                                <child>
-                                                    <widget class="GtkViewport" id="viewport2">
-                                                        <property name="visible">True</property>
-                                                        <child>
-                                                            <widget class="GtkImage" id="subconjuntos_image">
-                                                                <property name="visible">True</property>
-                                                            </widget>
-                                                        </child>
-                                                    </widget>
-                                                </child>
-                                            </widget>
-                                            <packing>
-                                                <property name="position">1</property>
-                                                <property name="tab_label" context="yes" translatable="yes">Page 2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <widget class="GtkScrolledWindow" id="scrolledwindow4">
-                                                <property name="visible">True</property>
-                                                <child>
-                                                    <widget class="GtkViewport" id="viewport4">
-                                                        <property name="visible">True</property>
-                                                        <child>
-                                                            <widget class="GtkImage" id="minimo_image">
-                                                                <property name="visible">True</property>
-                                                            </widget>
-                                                        </child>
-                                                    </widget>
-                                                </child>
-                                            </widget>
-                                            <packing>
-                                                <property name="position">2</property>
-                                                <property name="tab_label" context="yes" translatable="yes">Page 3</property>
-                                            </packing>
                                         </child>
                                     </widget>
                                     <packing>
@@ -220,18 +180,168 @@
                                     </packing>
                                 </child>
                             </widget>
+                        </child>
+                        <child>
+                            <widget class="GtkNotebook" id="automatas_notebook">
+                                <property name="scrollable">True</property>
+                                <property name="tab_vborder">1</property>
+                                <property name="visible">True</property>
+                                <child>
+                                    <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <widget class="GtkViewport" id="viewport1">
+                                                <property name="visible">True</property>
+                                                <child>
+                                                    <widget class="GtkVPaned" id="vpaned2">
+                                                        <property name="position">380</property>
+                                                        <property name="position_set">True</property>
+                                                        <property name="visible">True</property>
+                                                        <child>
+                                                            <widget class="GtkScrolledWindow" id="scrolledwindow3">
+                                                                <property name="visible">True</property>
+                                                                <child>
+                                                                    <widget class="GtkViewport" id="viewport3">
+                                                                        <property name="visible">True</property>
+                                                                        <child>
+                                                                            <widget class="GtkImage" id="thompson_image">
+                                                                                <property name="visible">True</property>
+                                                                            </widget>
+                                                                        </child>
+                                                                    </widget>
+                                                                </child>
+                                                            </widget>
+                                                        </child>
+                                                        <child>
+                                                            <widget class="GtkScrolledWindow" id="scrolledwindow5">
+                                                                <property name="visible">True</property>
+                                                                <child>
+                                                                    <widget class="GtkTreeView" id="thompson_treeview">
+                                                                        <property name="model">model4</property>
+                                                                        <property name="search_column">0</property>
+                                                                        <property name="visible">True</property>
+                                                                    </widget>
+                                                                </child>
+                                                            </widget>
+                                                            <packing>
+                                                                <property name="resize">True</property>
+                                                            </packing>
+                                                        </child>
+                                                    </widget>
+                                                </child>
+                                            </widget>
+                                        </child>
+                                    </widget>
+                                </child>
+                                <child>
+                                    <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <widget class="GtkViewport" id="viewport2">
+                                                <property name="visible">True</property>
+                                                <child>
+                                                    <widget class="GtkVPaned" id="vpaned5">
+                                                        <property name="position">380</property>
+                                                        <property name="position_set">True</property>
+                                                        <property name="visible">True</property>
+                                                        <child>
+                                                            <widget class="GtkScrolledWindow" id="scrolledwindow6">
+                                                                <property name="visible">True</property>
+                                                                <child>
+                                                                    <widget class="GtkViewport" id="viewport5">
+                                                                        <property name="visible">True</property>
+                                                                        <child>
+                                                                            <widget class="GtkImage" id="subconjuntos_image">
+                                                                                <property name="visible">True</property>
+                                                                            </widget>
+                                                                        </child>
+                                                                    </widget>
+                                                                </child>
+                                                            </widget>
+                                                        </child>
+                                                        <child>
+                                                            <widget class="GtkScrolledWindow" id="scrolledwindow7">
+                                                                <property name="visible">True</property>
+                                                                <child>
+                                                                    <widget class="GtkTreeView" id="subconjuntos_treeview">
+                                                                        <property name="is_focus">True</property>
+                                                                        <property name="model">model6</property>
+                                                                        <property name="search_column">0</property>
+                                                                        <property name="visible">True</property>
+                                                                    </widget>
+                                                                </child>
+                                                            </widget>
+                                                            <packing>
+                                                                <property name="resize">True</property>
+                                                            </packing>
+                                                        </child>
+                                                    </widget>
+                                                </child>
+                                            </widget>
+                                        </child>
+                                    </widget>
+                                    <packing>
+                                        <property name="position">1</property>
+                                        <property name="tab_label" context="yes" translatable="yes">Page 2</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <widget class="GtkScrolledWindow" id="scrolledwindow4">
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <widget class="GtkViewport" id="viewport4">
+                                                <property name="visible">True</property>
+                                                <child>
+                                                    <widget class="GtkVPaned" id="vpaned6">
+                                                        <property name="position">379</property>
+                                                        <property name="position_set">True</property>
+                                                        <property name="visible">True</property>
+                                                        <child>
+                                                            <widget class="GtkScrolledWindow" id="scrolledwindow8">
+                                                                <property name="visible">True</property>
+                                                                <child>
+                                                                    <widget class="GtkViewport" id="viewport6">
+                                                                        <property name="visible">True</property>
+                                                                        <child>
+                                                                            <widget class="GtkImage" id="minimo_image">
+                                                                                <property name="visible">True</property>
+                                                                            </widget>
+                                                                        </child>
+                                                                    </widget>
+                                                                </child>
+                                                            </widget>
+                                                        </child>
+                                                        <child>
+                                                            <widget class="GtkScrolledWindow" id="scrolledwindow9">
+                                                                <property name="visible">True</property>
+                                                                <child>
+                                                                    <widget class="GtkTreeView" id="minimo_treeview">
+                                                                        <property name="is_focus">True</property>
+                                                                        <property name="model">model5</property>
+                                                                        <property name="search_column">0</property>
+                                                                        <property name="visible">True</property>
+                                                                    </widget>
+                                                                </child>
+                                                            </widget>
+                                                            <packing>
+                                                                <property name="resize">True</property>
+                                                            </packing>
+                                                        </child>
+                                                    </widget>
+                                                </child>
+                                            </widget>
+                                        </child>
+                                    </widget>
+                                    <packing>
+                                        <property name="position">2</property>
+                                        <property name="tab_label" context="yes" translatable="yes">Page 3</property>
+                                    </packing>
+                                </child>
+                            </widget>
                             <packing>
                                 <property name="resize">True</property>
                             </packing>
                         </child>
-                    </widget>
-                </child>
-                <child>
-                    <widget class="GtkTreeView" id="messages_treeview">
-                        <property name="is_focus">True</property>
-                        <property name="model">model1</property>
-                        <property name="search_column">0</property>
-                        <property name="visible">True</property>
                     </widget>
                     <packing>
                         <property name="resize">True</property>
