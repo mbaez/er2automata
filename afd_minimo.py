@@ -28,7 +28,7 @@ class TablaTransiciones :
         """
         self.table = {}
         for arco in self.automata.arcos:
-            self.table[self.gen_table_key(arco)] = arco.destino
+            self.table[arco.origen.id + arco.simbolo] = arco.destino
             #se añaden los simbolos utilizados en el afd
             self.simbolos [arco.simbolo] = arco.simbolo
             #se controla que no se cargen estados repetidos
@@ -40,19 +40,6 @@ class TablaTransiciones :
                 self.estados[arco.destino.id] = arco.destino
                 #se añade en un diccionario todos los estados
                 self.estados_finales [arco.destino.final].append(arco.destino)
-    
-    def gen_table_key(self, arco) :
-        """
-        Este método se encarga de generar la clave para la tabla apartir
-        del arco.
-        
-        @type arco  : Arco
-        @param arco : el arco apartir del cual se generará la clave
-        
-        @rtype  : String
-        @return : la clave generada apartir del arco
-        """
-        return arco.origen.id + arco.simbolo
         
     def get_estados_finales (self):
         """
@@ -318,8 +305,9 @@ class AFD :
         id_sub_grupo = "";
         for simbolo in self.tabla.simbolos :
             grupo = self.tabla.get_table_value(estado.id + simbolo)
-            #print "\t#" + str(grupo)
-            id_sub_grupo += ":" + self.conjunto_pi.get_group_by_estado(grupo)
+            if grupo != None : 
+                #print "\t#" + str(grupo)
+                id_sub_grupo += ":" + self.conjunto_pi.get_group_by_estado(grupo)
         #print "\t$" + id_sub_grupo
 
         if not sub_grupos.has_key(id_sub_grupo) :

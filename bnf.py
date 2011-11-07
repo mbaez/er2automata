@@ -83,5 +83,6 @@ class Bnf:
                 b = (str(e.id) + "->" + self.lista)
                 self.bnf[j] = b
                 j +=1
-
+        
+        return self.bnf
 

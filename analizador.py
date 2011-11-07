@@ -6,7 +6,7 @@ from string_tokenizer import *
 :contact: mxbg.py@gmail.com
 """
 #Variable global que define si se mostran los detalles del proceso
-DEBUG = False
+DEBUG = True
 
 class Analizador:
     """

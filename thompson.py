@@ -28,7 +28,7 @@ class Thompson :
         
         self.automatas[0].estado_final.final = True
 
-        return a
+        return  self.automatas[0]
         
     def single(self, simbolo):
         """
