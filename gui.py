@@ -37,6 +37,72 @@ class EditorAlfabeto:
         self.main_window.destroy()
         
 
+class Simulador:
+    def __init__(self, afd, afn):
+        self.afd = afd
+        self.afn = afn
+        self.__init_params__()
+        self.__init_widgets__()
+        
+    def __init_params__(self):
+
+        self.sim_afd = None
+        self.sim_afn = None
+        self.afn_svg="images/sim_afn.svg"
+        self.afd_svg="images/sim_afd.svg"
+    
+    def __init_widgets__(self):
+        self.glade = gtk.glade.XML("simulador.glade")
+        self.glade.signal_autoconnect(self)
+        self.main_window = self.glade.get_widget("main_window")
+        self.main_window.show_all()
+        self.secuencia_entry = self.glade.get_widget("secuencia_entry")
+        
+        self.aplicar_button = self.glade.get_widget("aplicar_button")
+        self.actualizar_button = self.glade.get_widget("actualizar_button")
+        
+        self.atras_afd_button = self.glade.get_widget("atras_afd_button")
+        self.adelante_afd_button = self.glade.get_widget("adelante_afd_button")
+        self.afd_image = self.glade.get_widget("afd_image")
+
+        
+        self.atras_afn_button = self.glade.get_widget("atras_afn_button")
+        self.adelante_afn_button = self.glade.get_widget("adelante_afn_button")
+        self.afn_image = self.glade.get_widget("afn_image")
+        
+    
+    def on_aplicar_clicked(self, widget):
+        secuencia = self.secuencia_entry.get_text()
+        
+        self.sim_afd = SimuladorAFD(self.afd, secuencia, self.afd_svg)
+        self.afd_image.set_from_file(self.afd_svg)
+        
+        self.sim_afn = SimuladorAFN(self.afn, secuencia, self.afn_svg)
+        self.afn_image.set_from_file(self.afn_svg)
+        
+    def on_actualizar_clicked(self, widget):
+        self.on_aplicar_clicked(None)
+        
+    def on_atras_afn_clicked(self, widget):
+        if self.sim_afn != None :
+            if self.sim_afn.previous_state(): 
+                self.afn_image.set_from_file(self.afn_svg)
+        
+    def on_adelante_afn_clicked(self, widget):
+        if self.sim_afn != None :
+            if self.sim_afn.next_state(): 
+                self.afn_image.set_from_file(self.afn_svg)
+        
+    def on_atras_afd_clicked(self, widget):
+        if self.sim_afd != None :
+            if self.sim_afd.previous_state(): 
+                self.afd_image.set_from_file(self.afd_svg)
+        
+    def on_adelante_afd_clicked(self, widget):
+        if self.sim_afd != None :
+            if self.sim_afd.next_state(): 
+                self.afd_image.set_from_file(self.afd_svg)
+    
 class App:
  
     def __init__(self):
@@ -101,6 +167,7 @@ class App:
         """
         """
         print "Simular"
+        Simulador(self.afd_min ,self.afn)
 
     def on_ejecutar_clicked(self, widget):
         """

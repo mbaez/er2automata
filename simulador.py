@@ -10,9 +10,9 @@ from keys import Keys
 :contact: mxbg.py@gmail.com
 """
 
-class SimulardorAFD :
+class SimuladorAFD :
     
-    def __init__(self, afd, secuencia_caracteres):
+    def __init__(self, afd, secuencia_caracteres, svg_file):
         """
         @type afd  : Automata
         @param afd : automata apartir del cual se realiza al simulación
@@ -20,9 +20,12 @@ class SimulardorAFD :
         @type secuencia_caracteres  : String
         @param secuencia_caracteres : representa a la cadena de caracteres
                                     a ser utilizados en la simulación.
+                                    
+        @type svg_file  : String
+        @param svg_file : nombre del archivo de salida
         """
         self.afd =  afd
-        self.svg = SVGManager("afd_.svg")
+        self.svg = SVGManager(svg_file)
         #se construye el grafico apartir del afd
         self.svg.gen_svg_from_automata(afd)
         #se procesa el afd
@@ -33,9 +36,9 @@ class SimulardorAFD :
         #estados que representaran las transiciones
         self.estado_origen = afd.get_estado_inicial()
         self.estado_destino = None
-        self.estado_anterior = None
+        self.estado_anterior = {}
         #el indice del caracter acualtmente procesado
-        self.simbol_index = 0
+        self.simbol_index = -1
         self.secuencia_caracteres = secuencia_caracteres
    
     def next_state(self): 
@@ -49,12 +52,12 @@ class SimulardorAFD :
                   retorna False
         """
         #si es el estado inicial se pinta unicamente ese estado
-        if self.simbol_index == 0 :
+        if self.simbol_index == -1 :
             self.svg.set_node_color(self.estado_origen.id)
             self.svg.write_svg()
-            self.simbol_index+=1
+            self.simbol_index += 1
             
-        elif self.simbol_index  >= 1 and \
+        elif self.simbol_index  >= 0 and \
             self.simbol_index < len(self.secuencia_caracteres): 
             
             self.__next_state()
@@ -72,8 +75,7 @@ class SimulardorAFD :
         @return : True si se pudo realizar la transición, en caso contrario
                   retorna False
         """
-        if self.simbol_index >= 1 and \
-            self.simbol_index < len(self.secuencia_caracteres): 
+        if self.simbol_index >= 0: 
             
             self.__previous_state()
         else :
@@ -90,7 +92,7 @@ class SimulardorAFD :
         #se obiente el siguiente caracter
         caracter = self.secuencia_caracteres[self.simbol_index]
         #se establece el estado anterior
-        self.estado_anterior =  self.estado_origen
+        self.estado_anterior[str(self.simbol_index)] =  self.estado_origen
         #se obiene el estado destino resultante de la transicion 
         #producida por el simbolo caracter del estado origen
         id = self.estado_origen.id + caracter
@@ -120,19 +122,21 @@ class SimulardorAFD :
         Este metodo realiza la transición de un estado origen al estado 
         que fue procesado anteriormente.
         """
-        self.svg.set_node_color(self.estado_origen.id,"none")
-        
-        if self.estado_anterior != None :
-            self.svg.set_node_color(self.estado_anterior.id)
-            self.estado_origen = self.estado_anterior
-        #se actualiza el indice
-        self.simbol_index -= 1
-        #se actualiza el svg
-        self.svg.write_svg()
+        if (self.simbol_index - 1) >= 0 :
+            self.svg.set_node_color(self.estado_origen.id,"none")
+            id = str(self.simbol_index - 1)
+            if self.estado_anterior.has_key(id) :
+                self.simbol_index -= 1
+                self.svg.set_node_color(self.estado_anterior[id].id)
+                self.estado_origen = self.estado_anterior[id]
+            #se actualiza el indice
+            
+            #se actualiza el svg
+            self.svg.write_svg()
 
 class SimuladorAFN : 
 
-    def __init__(self, afn, secuencia_caracteres):
+    def __init__(self, afn, secuencia_caracteres, svg_file):
         """
         @type afn  : Automata
         @param afn : automata apartir del cual se realiza al simulación
@@ -142,8 +146,9 @@ class SimuladorAFN :
                                     a ser utilizados en la simulación.
         """
         self.afn =  afn
-        self.svg = SVGManager("afn_.svg")
+        self.svg = SVGManager(svg_file)
         self.svg.gen_svg_from_automata(afn)
+        self.camino = []
         #se procesa el afd
         self.svg.load_nodes()
         self.index = 0
@@ -233,4 +238,36 @@ class SimuladorAFN :
                 #solución
                 self.camino.pop()
 
+        return False
+
+    def next_state(self):
+        if self.camino == [] :
+            self.state = self.gen_camino()
+            self.index = 0
+            e = self.camino[self.index]
+            self.svg.set_node_color(e.origen.id)
+            self.svg.write_svg()
+            return True
+        
+        if self.state and self.index<len(self.camino):
+            e = self.camino[self.index]
+            self.svg.set_node_color(e.origen.id, "none")
+            self.svg.set_node_color(e.destino.id)
+            self.index += 1
+            self.svg.write_svg()
+            return True
+        
+        return False
+        
+        
+    def previous_state(self): 
+
+        if self.state and self.index >= 1:
+            self.index -= 1
+            e = self.camino[self.index]
+            self.svg.set_node_color(e.destino.id, "none")
+            self.svg.set_node_color(e.origen.id)
+            self.svg.write_svg()
+            return True
+        
         return False
