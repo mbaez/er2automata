@@ -219,6 +219,7 @@ class ConjuntoPi :
 class AFD :
 
     def __init__(self, automata):
+        ConjuntoPi.ID_GRUPO = 0
         #representa la tabla de transiciones de los estados del afd
         self.tabla = TablaTransiciones(automata)
         self.tabla.build_table()

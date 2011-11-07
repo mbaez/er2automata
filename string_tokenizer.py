@@ -79,7 +79,7 @@ class StringTokenizer:
                 #Si en es menor a cero, la definicion regular no esta 
                 #definida correctamente, por lo que se emite un error
                 if end < 0 :
-                    print "ERROR: Se esperaba un ';'"
+                    raise Exception("ERROR: Se esperaba un ';'")
                 #Si la definición regular es correcta se añade a la lista 
                 #de tokens
                 self.tokens.append(self.expresion [(index):end])
@@ -94,8 +94,9 @@ class StringTokenizer:
                 #un oprador y tampoco definición regular, se emite un 
                 #mensaje de error
                 
-                print "ERROR: El caracter '" + c + "' no se encuentra definido"
-                exit();
+                raise Exception( "ERROR: El caracter '" + c + \
+                    "' no se encuentra definido")
+                #exit();
             #se incrementa el valor del indice para que apunte al siguiente
             #caracter
             index += 1

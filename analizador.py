@@ -6,7 +6,7 @@ from string_tokenizer import *
 :contact: mxbg.py@gmail.com
 """
 #Variable global que define si se mostran los detalles del proceso
-DEBUG = True
+DEBUG = False
 
 class Analizador:
     """
@@ -117,10 +117,12 @@ class Analizador:
             def_reg_value = self.keys.get_tabla_simbolos_value_at(self.token)
             
             if def_reg_value == None :
-                print "ERROR DE SINTAXIS, La definición regular '" + \
+                raise Exception( \
+                    "ERROR DE SINTAXIS, La definición regular '" + \
                         self.token + "' no se encuentra en la tabal de \
                         simbolos."
-                exit()
+                )
+                #exit()
             
             #se añade la notacion postfija de la definción regular
             self.postfija += def_reg_value
@@ -151,8 +153,8 @@ class Analizador:
             print "oper_una-> Token = ", self.token
 
         if self.operadores_unarios.find(self.token) < 0:
-            print "ERROR DE SINTAXIS, se esperaba un operador unario"
-            exit();
+            raise Exception( "ERROR DE SINTAXIS, se esperaba un operador unario")
+            #exit();
 
         self.postfija.append(self.token)
         self.match(self.token)
@@ -176,7 +178,7 @@ class Analizador:
             return;
 
         else:
-            print "ERROR DE SINTAXIS, inesperado '", t, "' se esperaba '"\
-                , self.token, "'";
-            exit()
+            raise Exception("ERROR DE SINTAXIS, inesperado '", t, "' se esperaba '"\
+                , self.token, "'" );
+            #exit()
 

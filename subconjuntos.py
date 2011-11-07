@@ -12,7 +12,7 @@ from stack import *
 
 class Subconjuntos:
 
-    def __init__(self, afn) :
+    def __init__(self, afn, keys=None) :
         self.automatas = []
         self.afn = afn
         self.cola_estados = [] + afn.get_estados().values()
@@ -20,6 +20,7 @@ class Subconjuntos:
         self.afd = Automata()
         self.__estados_d = []
         self.__cola_temp = deque()
+        self.keys = keys
 
     def __cerradura_vacia_inicial(self, estado):
         """
@@ -149,7 +150,7 @@ class Subconjuntos:
             estado_origen = self.get_estado_or_create(t_id)
             __estado = self.afn.get_next_estado()
             #Buscar transiciones por cada simbolo
-            for simbolo in Keys.ALFABETO:
+            for simbolo in self.keys.alfabeto:
                 #Aplicar __cerradura_vacia(mueve(T, simbolo))
                 M = self.__mover(T, simbolo)
                 U = self.__cerradura_vacia(M)
@@ -187,12 +188,16 @@ class Subconjuntos:
         for arco in self.afd.arcos : 
             _estados = [arco.origen, arco.destino]
             for estado in _estados : 
+                #~ if estado.id.find(self.afn.estado_inicial.id) >= 0 :
+                    #~ self.afd.estado_inicial = estado
+                    
                 #~ Se renombra cada estado
                 if estado.id.find("(") >= 0 :
                     #~ se genera el nuevo id
                     estado.id = "E" + str(i)
                     #~ se incrementa el id secuencial
                     i+=1
+               
         
     def get_estado_or_create(self, id) : 
         """

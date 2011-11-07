@@ -14,8 +14,9 @@
     <widget class="GtkListStore" id="model1"/>
     <widget class="GtkWindow" id="main_window">
         <property name="default_height">600</property>
-        <property name="default_width">600</property>
+        <property name="default_width">800</property>
         <property name="mnemonics_visible">False</property>
+        <property name="title" context="yes" translatable="yes">Er2Automata</property>
         <signal handler="on_main_delete_event" name="delete-event"/>
         <child>
             <widget class="GtkVPaned" id="vpaned1">
@@ -30,34 +31,50 @@
                         <child>
                             <widget class="GtkHPaned" id="hpaned1">
                                 <property name="is_focus">True</property>
-                                <property name="position">281</property>
+                                <property name="position">358</property>
                                 <property name="position_set">True</property>
                                 <property name="visible">True</property>
                                 <child>
                                     <widget class="GtkEntry" id="expresion_entry">
+                                        <property name="is_focus">True</property>
                                         <property name="visible">True</property>
                                     </widget>
                                 </child>
                                 <child>
-                                    <widget class="GtkHBox" id="hbox1">
+                                    <widget class="GtkHButtonBox" id="hbuttonbox1">
+                                        <property name="layout_style">spread</property>
                                         <property name="visible">True</property>
                                         <child>
-                                            <widget class="GtkButton" id="ejecutar_button">
-                                                <property name="label">gtk-execute</property>
-                                                <property name="use_stock">True</property>
-                                                <property name="visible">True</property>
-                                                <signal handler="on_ejecutar_clicked" name="clicked"/>
-                                            </widget>
-                                        </child>
-                                        <child>
                                             <widget class="GtkButton" id="anhadir_button">
+                                                <property name="is_focus">True</property>
                                                 <property name="label">gtk-add</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="on_anhadir_clicked" name="clicked"/>
                                             </widget>
+                                        </child>
+                                        <child>
+                                            <widget class="GtkButton" id="ejecutar_button">
+                                                <property name="is_focus">True</property>
+                                                <property name="label">gtk-execute</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_ejecutar_clicked" name="clicked"/>
+                                            </widget>
                                             <packing>
                                                 <property name="position">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <widget class="GtkButton" id="editar_button">
+                                                <property name="is_focus">True</property>
+                                                <property name="label">gtk-edit</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="on_editar_clicked" name="clicked"/>
+                                            </widget>
+                                            <packing>
+                                                <property name="position">2</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -66,14 +83,14 @@
                                                 <property name="visible">True</property>
                                                 <signal handler="on_simulacion_clicked" name="clicked"/>
                                                 <child>
-                                                    <widget class="GtkImage" id="image11">
+                                                    <widget class="GtkImage" id="image4">
                                                         <property name="stock">gtk-media-play</property>
                                                         <property name="visible">True</property>
                                                     </widget>
                                                 </child>
                                             </widget>
                                             <packing>
-                                                <property name="position">2</property>
+                                                <property name="position">3</property>
                                             </packing>
                                         </child>
                                     </widget>

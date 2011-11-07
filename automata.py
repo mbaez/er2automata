@@ -116,6 +116,7 @@ class Automata :
         self.estados_ordenados = []
         self.estados = {}
         self.arcos = []
+        self.simbolos = {}
 
     def add_arcos(self, arcos) :
         """
@@ -202,7 +203,6 @@ class Automata :
         """
         self.estados[ori_estado.id] = ori_estado
         self.estados[sig_estado.id] = sig_estado
-
         self.arcos.append(Arco(ori_estado, sig_estado, simbolo))
 
     def copy(self) :

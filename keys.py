@@ -17,17 +17,22 @@ class Keys :
     CONCAT = "."
     NONE_OR_ONE = "?"
     COPY_LABEL ="B" 
-    ALFABETO = "ab"
+    DIGITOS = "0123456789"
+    ALFABETO = "abcdefghijklmnopqrstuvwxyz"
     
 
-    def __init__ (self) :
+    def __init__ (self, alfabeto=None) :
         self.operadores_binarios = "|."
         self.operadores_unarios = "+*?"
         self.agrupadores = "()"
         self.operadores =  self.operadores_binarios + \
                            self.operadores_unarios + \
                            self.agrupadores
-        self.alfabeto = "abcd"
+        if alfabeto != None:
+            self.alfabeto = alfabeto
+        else :
+            self.alfabeto = Keys.ALFABETO + Keys.DIGITOS
+            
         self.definicion_regular = "$"
         self.tabla_simbolos = {}
         self.tabla = {}

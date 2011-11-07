@@ -13,6 +13,29 @@ import pygtk
 pygtk.require("2.0")
 import gtk, gtk.glade
 
+class EditorAlfabeto:
+    def __init__(self, keys):
+        self.keys = keys
+        self.glade = gtk.glade.XML("editor_alfabeto.glade")
+        self.glade.signal_autoconnect(self)
+        self.main_window = self.glade.get_widget("main_window")
+        self.main_window.show_all()
+        self.alfabeto_text = self.glade.get_widget("alfabeto_text")
+        buffer = self.alfabeto_text.get_buffer()
+        buffer.set_text(self.keys.alfabeto)
+    
+    def on_aplicar_clicked(self, widget):
+        buffer = self.alfabeto_text.get_buffer()
+        start = buffer.get_start_iter() 
+        end = buffer.get_end_iter() 
+        
+        self.keys.alfabeto = buffer.get_text(start, end)
+        
+        self.main_window.destroy()
+    
+    def on_cancelar_clicked(self, widget):
+        self.main_window.destroy()
+        
 
 class App:
  
@@ -30,7 +53,11 @@ class App:
         self.__init_canvas__()
 
     def __init_tree_view__(self):
-        
+        """
+        Este método inicializa los treeview de la aplicacion, obiene
+        los widgets y los vuelve construir para corregir los errores
+        al procesar el archivo .glade
+        """
         self.bnf_treeview = self.glade.get_widget("bnf_treeview")
         self.messages_treeview = self.glade.get_widget("messages_treeview")
         self.tabla_simbolos_treeview = self.glade.get_widget("tabla_simbolos_treeview")
@@ -44,11 +71,19 @@ class App:
                 "Tabla de Simbolos",self.tabla_simbolos_treeview)
                 
     def __init_canvas__(self):
+        """
+        Este método obtiene las referencias de los labels en los cuales
+        se cargaran las imagenes
+        """
         self.thompson_image = self.glade.get_widget("thompson_image")
         self.subconjutos_image = self.glade.get_widget("subconjuntos_image")
         self.minimo_image = self.glade.get_widget("minimo_image")
         
     def __init_automata_params__(self):
+        """
+        Este método inicializa las variables que seran utilizadas por
+        los algorimtos
+        """
         self.keys = Keys()
         self.afn = None
         self.afn_svg = "images/afn.svg"
@@ -69,15 +104,20 @@ class App:
 
     def on_ejecutar_clicked(self, widget):
         """
-            Se en carga realizar el analisis lexico de la expresion 
-            ingresada por el usuario
+        Se en carga realizar el analisis lexico de la expresion 
+        ingresada por el usuario
         """
         texto = self.expresion_entry.get_text().strip()
-        if text == "" :
+        if texto == "" :
             self.show_error_dialog("Debe especificar una expresión")
-        a = Analizador(texto, self.keys);
-        a.start()
         
+        try:
+            a = Analizador(texto, self.keys);
+            a.start()
+        except Exception as inst:
+            self.show_error_dialog(str(inst))
+            return;
+
         thompson = Thompson(a.postfija)
         self.afn = thompson.start()
         #se dibuja el automata
@@ -86,8 +126,7 @@ class App:
         #se actualiza las el canvas
         self.thompson_image.set_from_file(self.afn_svg)
 
-        
-        subconjuntos = Subconjuntos(self.afn)
+        subconjuntos = Subconjuntos(self.afn, self.keys)
         self.afd = subconjuntos.start_subconjutos()
         #se dibuja el automata
         svg = SVGManager(self.afd_svg)
@@ -116,8 +155,8 @@ class App:
     
     def on_anhadir_clicked(self, widget):
         """
-            Se encarga de agregar una definicion regular ingresada por 
-            el usuario a la tabla de simbolos
+        Se encarga de agregar una definicion regular ingresada por 
+        el usuario a la tabla de simbolos
         """
         
         texto = self.expresion_entry.get_text().strip()
@@ -133,12 +172,20 @@ class App:
         self.tabla_simbolos_store.append([texto])
 
 
+    def on_editar_clicked(self, widget):
+        EditorAlfabeto(self.keys)
+        
+        
     ###################################################################
     def __clean_store__(self, store) :
+        """
+        Este método limpia el store del tree view
+        """
         store = gtk.ListStore(str)
         
     def show_error_dialog(self, message):
         """
+        Este método genera un dialogBox de error.
         """
         dialog = gtk.MessageDialog(self.main_window,
                 type=gtk.MESSAGE_ERROR, 
@@ -148,12 +195,13 @@ class App:
         dialog.run()
         dialog.destroy()
     
-    def create_column(self, treeView, column_title):
+    def create_column(self, tree_view, column_title):
         """
+        Este metodo crea una columna en el tree_view
         """
         rendererText = gtk.CellRendererText()
         column = gtk.TreeViewColumn(column_title, rendererText, text=0)
-        treeView.append_column(column)
+        tree_view.append_column(column)
     
     def build_tree_view(self, column, tree_view):
         """
@@ -163,6 +211,7 @@ class App:
         tree_view.set_rules_hint(True)
         self.create_column(tree_view, column)
         return store_model
+
 
 
 if __name__ == "__main__":
