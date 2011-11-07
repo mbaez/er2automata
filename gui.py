@@ -16,7 +16,7 @@ import gtk, gtk.glade
 class EditorAlfabeto:
     def __init__(self, keys):
         self.keys = keys
-        self.glade = gtk.glade.XML("editor_alfabeto.glade")
+        self.glade = gtk.glade.XML("glade/editor_alfabeto.glade")
         self.glade.signal_autoconnect(self)
         self.main_window = self.glade.get_widget("main_window")
         self.main_window.show_all()
@@ -52,7 +52,7 @@ class Simulador:
         self.afd_svg="images/sim_afd.svg"
     
     def __init_widgets__(self):
-        self.glade = gtk.glade.XML("simulador.glade")
+        self.glade = gtk.glade.XML("glade/simulador.glade")
         self.glade.signal_autoconnect(self)
         self.main_window = self.glade.get_widget("main_window")
         self.main_window.show_all()
@@ -107,7 +107,7 @@ class App:
  
     def __init__(self):
         
-        self.glade = gtk.glade.XML("gui.glade")
+        self.glade = gtk.glade.XML("glade/gui.glade")
         
         self.glade.signal_autoconnect(self)
         self.main_window = self.glade.get_widget("main_window")
