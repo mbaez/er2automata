@@ -4,39 +4,39 @@ import pygraphviz as pgv
 import re
 from xml.dom.minidom import parse
 
-class SVGManager : 
+class SVGManager :
 
     document = None
     nodes = {}
-    
+
     def __init__(self, svg_file_name) :
         """
         Este metodo se encarga de encarga de inicializar los atributos
         y parsea el archivo svg para que sea manejable
-        
+
         @type svg_file_name  : String
         @param svg_file_name : nombre del archivo svg
         """
         self.svg_file_name = svg_file_name
-        
-        
-    
-    def load_nodes(self) : 
+
+
+
+    def load_nodes(self) :
         """
         Se encarga de prosesar los tags que poseen la siguiente estructura
-        
-        <g id="node2" class="node"> 
+
+        <g id="node2" class="node">
             <title>E4</title>
             <ellipse fill="none" stroke="black"/>
             <text>E4</text>
         </g>
-        
+
         Apartir de esta información se generan entradas en un diccionario
-        donde la clave es el texto contenido en <title> </title> y el 
+        donde la clave es el texto contenido en <title> </title> y el
         es la referncia al atributo de ellipse.
-        
+
         ["E4"] -> <ellipse fill="none" stroke="black"/>
-        
+
         """
         self.document = parse(self.svg_file_name)
         self.document.normalize()
@@ -56,19 +56,19 @@ class SVGManager :
                     #se obtiene el tag <ellipse>... </ellipse>
                     ellipse = polygon.getElementsByTagName("ellipse")[0]
                     self.polygons.append(ellipse)
-                    #se guarda en el diccionario el id del estado y la 
+                    #se guarda en el diccionario el id del estado y la
                     #referencia a la figura
                     # ["E4"] -> <ellipse fill="none" stroke="black"/>
                     #print ellipse
                     self.nodes[label] = ellipse#len(self.polygons)-1
-                
+
     def set_node_color(self, node_id, color="#ADD8E6") :
         """
-        Este método se encarga de reemplazar el fill del la ellipse 
+        Este método se encarga de reemplazar el fill del la ellipse
         identificado por el id node_id y establecer el valor color.
-        
+
         [node_id] --> <ellipse fill=color stroke="black
-        
+
         @type node_id  : String
         @param node_id : identificador del estado al cual se desea cambiar
                          el color.
@@ -79,25 +79,25 @@ class SVGManager :
         #print node_id
         if self.nodes.has_key(node_id) :
             self.nodes[node_id].attributes["fill"].value = color
-            
+
             #print  node_id + "->" +  self.nodes[node_id].attributes["fill"].value
 
-    
+
     def write_svg(self, svg_file_name=None) :
         """
         Este metodo se volcar el el svg en un archivo de nombre
         svg_file, si svg_file no es especificado se sobrescribe el archivo
         original
-        
+
         @type svg_file_name  : String
-        @param svg_file_name : nombre del archivo en el cual se va 
+        @param svg_file_name : nombre del archivo en el cual se va
                                a escribir el svg, si no se especifica
                                el nombre sobrescribe el archivo original
-        
+
         """
-        if svg_file_name == None : 
+        if svg_file_name == None :
             svg_file_name =  self.svg_file_name
-        #se el archivo, si no existe se crea 
+        #se el archivo, si no existe se crea
         source = open(svg_file_name, 'w+')
         # se escribe en el archivo el contenido del documento xml actual
         ugly = self.document.toxml()
@@ -108,14 +108,14 @@ class SVGManager :
     def gen_svg_from_automata(self, automata, layout_prog="dot") :
         """
         Este método genera una imagen svg apartir de un automata
-        
+
         @type automata  : Automata
         @param automata : automata apartil del cual se generará la imagen
-        
-        @type layout_prog  : String 
+
+        @type layout_prog  : String
         @param layout_prog : indica el algoritmo que será utilizado para
                              dibujar el grafo. los valores posibles son
-                             neato|dot|twopi|circo|fdp, el valor por 
+                             neato|dot|twopi|circo|fdp, el valor por
                              defecto es dot.
         """
         #se crea un grafo dirigido
@@ -136,11 +136,11 @@ class SVGManager :
                 gr.add_node(estado.id, shape = "circle")
 
         #Se añade un nodo "invisible"
-        gr.add_node("",width="0",height="0")
+        gr.add_node(u"\u2205",width="0",height="0")
         #se añade un arcon entre el nodo vacio y el estado inicial del
         #automata, con esto se obtiene el siguiente grafico :
         # --Inicio--> (Estado Inicial)
-        gr.add_edge(("",inicio.id), label="Inicio", color='#8dad48')
+        gr.add_edge((u"\u2205",inicio.id), label="Inicio", color='#8dad48')
         #por cada arco definido se añade las relaciones entre los nodos
         #definidos anteriormente
         for arco in automata.arcos :
